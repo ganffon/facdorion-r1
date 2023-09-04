@@ -1,0 +1,40 @@
+{
+  "fdrfilter": {
+    "prefix": "ff",
+    "body": [
+      "const filterReducer = (filter, action) => {",
+      "  switch (action.type) {",
+      "    case 'update':",
+      "      return { ...filter, [action.id]: action.value };",
+      "    case 'reset':",
+      "      return { ...{ startDate: getDt(-7).dateFull, endDate: getDt.dateFull } };",
+      "    default:",
+      "      return filter;",
+      "  }",
+      "};",
+      "const [filter, filterDispatch] = useReducer(filterReducer, {",
+      "  startDate: getDt(-7).dateFull,",
+      "  endDate: getDt.dateFull,",
+      "});"
+    ],
+    "description": "<FdrInput/>, <FdrDate/>, <FdrCombo/> 를 컨트롤하기 위한 useReducer"
+  },
+  "cboconvert": {
+    "prefix": "cboconvert",
+    "body": [
+      "const ${1:변경된오브젝트} = useMemo(() => {",
+      "  return convertKeyValue(${2:대상오브젝트}, '${3:Key로변경}', '${4:Value로변경}');",
+      "}, [${2:대상오브젝트}]);"
+    ],
+    "description": "원본 리스트를 콤보에 쓸 수 있도록 Key, Value 형식으로 변경"
+  },
+  "cboreverse": {
+    "prefix": "cboreverse",
+    "body": [
+      "const ${1:reverseListName} = useMemo(() => {",
+      "  return reverseKeyValue(${2:listName}, '${3:reverseKeyName}', '${4:reverseValueName}');",
+      "}, [${2:listName}]);"
+    ],
+    "description": "콤보에서 선택한 obj 를 원본 obj의 키 값으로 복원"
+  }
+}
