@@ -59,20 +59,29 @@ export function Line(props) {
   return (
     <Contents>
       <S.Header>
-        <FdrDate id={"startDate"} label={"조회기간"} value={filter.startDate} dispatch={filterDispatch} />
+        {/* <FdrDate id={"startDate"} label={"조회기간"} value={filter.startDate} dispatch={filterDispatch} />
         <FdrDate id={"endDate"} value={filter.endDate} dispatch={filterDispatch} />
         <FdrInput id={"aInput"} label={"A Input"} value={filter.aInput} dispatch={filterDispatch} />
         <FdrInput id={"bInput"} label={"B Input"} value={filter.bInput} dispatch={filterDispatch} />
-        <FdrCombo id={"aCombo"} label={"test"} list={lineList} value={filter.aCombo} dispatch={filterDispatch} />
-        <FdrButton />
+        <FdrCombo id={"aCombo"} label={"test"} list={lineList} value={filter.aCombo} dispatch={filterDispatch} /> */}
+        <FdrButton type={"search"} outline={false} />
+        <FdrButton type={"addRow"} />
+        <FdrButton type={"cancelRow"} />
+        <FdrButton type={"delete"} />
+        <FdrButton type={"edit"} />
+        <FdrButton type={"new"} />
+        <FdrButton type={"save"} />
+        <FdrButton type={"mapping"} />
+        <FdrButton type={"vector"} />
+        <FdrButton type={"ok"} />
+        <FdrButton type={"cancel"} />
+        <FdrButton type={"sync"} />
+        <FdrButton type={"download"} />
+        <FdrButton type={"detail"} />
+        <FdrButton type={"clean"} />
+        <FdrButton type={"calculate"} />
       </S.Header>
-      <S.Main>
-        <S.Color color={"1"} />
-        <S.Color color={"2"} />
-        <S.Color color={"3"} />
-        <S.Color color={"4"} />
-        <S.Color color={"5"} />
-      </S.Main>
+      <S.Main></S.Main>
     </Contents>
   );
 }

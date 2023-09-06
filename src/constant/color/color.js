@@ -76,6 +76,9 @@ export const color = {
   avatar: { menu: { hover: palette.skyBlue[100] } },
   contents: { background: palette.black[100], selected: palette.red[100] },
   notFound: { background: palette.skyBlue[100], title: palette.red[300], description: palette.black[700] },
-  button: { background: palette.blue[500], border: palette.black[100] },
+  button: {
+    fill: { background: palette.blue[500], border: palette.black[100], font: palette.white },
+    outline: { background: palette.white, border: palette.blue[500], font: palette.blue[500] },
+  },
   white: palette.white,
 };
