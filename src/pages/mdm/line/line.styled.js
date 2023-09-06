@@ -12,7 +12,7 @@ export const Header = styled("header")`
   display: flex;
   align-items: center;
   padding: 10px;
-  gap: 10px;
+  gap: 5px;
 `;
 export const Main = styled("main")`
   width: 100%;
@@ -24,11 +24,6 @@ export const Main = styled("main")`
   align-items: center;
   padding: 10px;
   gap: 10px;
-`;
-
-export const Color = styled("div")`
-  width: 200px;
-  height: 200px;
 `;
 
 export const Btn = styled("button")`
