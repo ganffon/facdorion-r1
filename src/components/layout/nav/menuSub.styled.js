@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { color } from "constant/color/color";
+import { palette } from "constant/color/color";
 
 export const MenuSub = styled("div")`
   position: absolute;
@@ -23,7 +23,7 @@ export const MenuSub = styled("div")`
   flex-direction: column;
   gap: 10px;
 
-  background: ${color.menuSub.background};
+  background: ${palette.blue[700]};
 
   padding: 20px;
   border-radius: 20px;
@@ -62,7 +62,7 @@ export const MenuWrap = styled("div")`
 `;
 export const MenuSubTitle = styled("div")`
   height: 30px;
-  color: ${color.menuSub.title};
+  color: ${palette.skyBlue[500]};
   font-size: 16px;
   font-weight: 600;
   display: flex;
@@ -85,7 +85,7 @@ export const MenuList = styled("div")`
   }
 
   &:hover {
-    background: ${color.menuSub.hover};
+    background: ${palette.blue[600]};
     cursor: pointer;
     border-radius: 10px;
   }

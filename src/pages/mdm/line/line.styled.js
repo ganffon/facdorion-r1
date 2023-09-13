@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { color } from "constant/color/color";
+import { palette } from "constant/color/color";
 
 const headerHeight = "70px";
 
@@ -8,7 +8,7 @@ export const Header = styled("header")`
   height: ${headerHeight};
   background: white;
   border-radius: 10px;
-  box-shadow: 1px 1px 5px #444;
+  box-shadow: 1px 1px 5px ${palette.black[500]};
   display: flex;
   align-items: center;
   padding: 10px;
@@ -17,9 +17,9 @@ export const Header = styled("header")`
 export const Main = styled("main")`
   width: 100%;
   height: calc(100% - ${headerHeight});
-  background: ${color.white};
+  background: ${palette.white};
   border-radius: 10px;
-  box-shadow: 1px 1px 5px #444;
+  box-shadow: 1px 1px 5px ${palette.black[500]};
   display: flex;
   align-items: center;
   padding: 10px;

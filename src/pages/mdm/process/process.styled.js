@@ -1,3 +1,4 @@
+import { palette } from "constant/color/color";
 import styled from "styled-components";
 
 export const Contents = styled("div")`
@@ -14,7 +15,7 @@ export const Header = styled("header")`
   height: 200px;
   background: white;
   border-radius: 10px;
-  box-shadow: 5px 5px 5px 2px #444;
+  box-shadow: 5px 5px 5px 2px ${palette.black[500]};
   display: flex;
   align-items: center;
   padding: 10px;

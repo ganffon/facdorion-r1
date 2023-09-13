@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import * as S from "../fdrComponents.styled";
 
 function FdrDate(props) {
@@ -15,12 +15,38 @@ function FdrDate(props) {
     dispatchType = "update",
     onSearch = () => {},
     className = "",
+    limit = "",
   } = props;
+
+  const refDate = useRef("");
+
+  useEffect(() => {
+    refDate.current = value;
+    // 처음 셋팅 된 날짜 저장
+  }, []);
 
   const onKeyDown = (e) => {
     if (e.key === "Enter") {
       onSearch();
     }
+  };
+
+  const onChange = (e) => {
+    let selectedDate = e.target.value;
+    switch (limit) {
+      case "after":
+        if (refDate.current < selectedDate) {
+          selectedDate = refDate.current;
+        }
+        break;
+      case "before":
+        if (refDate.current > selectedDate) {
+          selectedDate = refDate.current;
+        }
+        break;
+      default:
+    }
+    dispatch({ type: dispatchType, id: e.target.id, value: selectedDate });
   };
   return (
     <S.FdrDate
@@ -40,7 +66,7 @@ function FdrDate(props) {
       }}
       width={width}
       label={label}
-      onChange={(e) => dispatch({ type: dispatchType, id: e.target.id, value: e.target.value })}
+      onChange={onChange}
       onKeyDown={onKeyDown}
     />
   );

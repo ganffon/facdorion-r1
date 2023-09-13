@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { width } from "constant/layout/layout";
-import { color } from "constant/color/color";
+import { palette } from "constant/color/color";
 
 export const MenuBox = styled("div")``;
 
@@ -21,7 +21,7 @@ export const Menu = styled("nav")`
   width: ${width.MENU};
   display: ${($props) => ($props.$isMenuSlide ? "none" : "static")};
 
-  background: ${color.menu.background};
+  background: ${palette.blue[800]};
 
   padding: 10px 5px;
 `;
@@ -39,12 +39,12 @@ export const MenuWrap = styled("div")`
   align-items: center;
 
   &:hover {
-    background: ${color.menu.hover};
+    background: ${palette.blue[700]};
     border-radius: 10px;
     cursor: pointer;
   }
   &.selected {
-    background: ${color.menu.hover};
+    background: ${palette.blue[700]};
     border-radius: 10px;
     cursor: pointer;
   }

@@ -1,16 +1,6 @@
-import { color, palette } from "constant/color/color";
-import styled, { keyframes } from "styled-components";
-
-export const fadeIn = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
+import { palette } from "constant/color/color";
+import styled from "styled-components";
+import * as A from "style/animation/animation";
 
 export const Container = styled.div`
   height: 100vh;
@@ -20,10 +10,10 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 20px;
 
-  // background: rgb(210, 237, 255);
-  background: ${color.notFound.background};
-  animation: ${fadeIn} 1s ease-in;
+  background: ${palette.skyBlue[100]};
+  animation: ${A.fadeIn} 1s ease-in;
 `;
 export const Wrapper = styled("div")`
   display: flex;
@@ -53,12 +43,12 @@ export const Title = styled("div")`
   font-size: 3rem;
   font-weight: 900;
   text-align: center;
-  color: ${color.notFound.title};
+  color: ${palette.red[200]};
 `;
 
 export const Description = styled("div")`
   font-size: 20px;
   font-weight: 400;
   text-align: center;
-  color: ${color.notFound.description};
+  color: ${palette.black[800]};
 `;

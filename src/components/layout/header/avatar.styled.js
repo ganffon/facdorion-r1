@@ -1,6 +1,6 @@
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import * as A from "style/animation/animation";
-import { color } from "constant/color/color";
+import { palette } from "constant/color/color";
 export const Avatar = styled("div")`
   position: relative;
 `;
@@ -30,7 +30,7 @@ export const Menu = styled("div")`
   font-weight: 500;
   padding: 0px 10px;
   &:hover {
-    background: ${color.avatar.menu.hover};
+    background: ${palette.skyBlue[100]};
     cursor: pointer;
     border-radius: 10px;
   }
