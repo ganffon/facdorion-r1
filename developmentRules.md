@@ -33,7 +33,9 @@
 1. pagesIndex.js 파일 우클릭 "통합 터미널에서 열기"
 2. `node pagesIndex.js` 입력하여 실행
 
----
+#### 🟥 `주의사항`❗
+
+> router에 연결되는 script의 확장자만 `*.jsx` 로 지정한다.
 
 ### ✅ `배포하는 순서`
 

@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { height } from "constant/layout/layout";
-import { color } from "constant/color/color";
+import { palette } from "constant/color/color";
+import * as A from "style/animation/animation";
 
 export const AppBar = styled("header")`
   height: ${height.APP_BAR};
@@ -31,7 +32,7 @@ export const Logo = styled("img")`
 export const MenuSlide = styled("div")`
   width: 100%;
   height: 2px;
-  background: ${color.appBar.slide.icon};
+  background: ${palette.black[600]};
 `;
 export const MenuSlideIcon = styled("div")`
   display: flex;
@@ -46,7 +47,7 @@ export const MenuSlideIcon = styled("div")`
   padding: 3px;
 
   &:hover ${MenuSlide} {
-    background: ${color.appBar.slide.hover};
+    background: ${palette.skyBlue[500]};
   }
 `;
 
@@ -62,7 +63,7 @@ export const StepSingle = styled("div")`
   font-family: NotoSansKR;
   font-style: normal;
   font-weight: 900;
-  color: ${color.appBar.step.main};
+  color: ${palette.blue[900]};
 `;
 export const StepHeader = styled("div")`
   display: flex;
@@ -70,7 +71,7 @@ export const StepHeader = styled("div")`
   gap: 10px;
   font-size: 12px;
   font-weight: 500;
-  color: ${color.appBar.step.header};
+  color: ${palette.black[500]};
 `;
 export const StepMain = styled("div")`
   display: flex;
@@ -79,7 +80,7 @@ export const StepMain = styled("div")`
   font-family: NotoSansKR;
   font-style: normal;
   font-weight: 900;
-  color: ${color.appBar.step.main};
+  color: ${palette.blue[900]};
 `;
 export const Bookmark = styled("span")`
   font-size: 25px;
@@ -87,19 +88,19 @@ export const Bookmark = styled("span")`
   cursor: pointer;
   color: gray;
   &.onBookmark {
-    color: ${color.appBar.step.bookmark};
+    color: ${palette.yellow[500]};
     text-shadow: -1px 0px black, 0px 1px black, 1px 0px black, 0px -1px black;
   }
 `;
 
 export const UserTextBackground = styled("div")`
   height: 60%;
-  background: ${color.appBar.message.background.blue};
+  background: ${palette.skyBlue[100]};
   border-radius: 5px;
   padding: 0px 10px;
   cursor: default;
   &.pink {
-    background: rgb(255, 200, 200, 0.5);
+    background: ${palette.red[100]};
   }
 `;
 export const UserText = styled("div")`
@@ -108,7 +109,7 @@ export const UserText = styled("div")`
   font-weight: 400;
   font-size: 14px;
   height: 100%;
-  color: ${color.appBar.message.font};
+  color: ${palette.black[800]};
   display: flex;
   align-items: center;
 `;
@@ -119,16 +120,5 @@ export const BuildAlert = styled("div")`
   font-weight: 900;
   font-size: 14px;
   color: red;
-  animation: blink infinite 0.8s;
-  @keyframes blink {
-    0% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(0.95);
-    }
-    100% {
-      transform: scale(1);
-    }
-  }
+  animation: ${A.blink} infinite 0.8s;
 `;

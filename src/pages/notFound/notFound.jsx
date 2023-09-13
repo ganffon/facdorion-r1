@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import doriNotFound from "img/notFound/doriNotFound.svg";
 import Text404 from "img/notFound/404.svg";
 import * as S from "./notFound.styled";
+import FdrButton from "components/button/fdrButton";
 
 export const NotFound = () => {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ export const NotFound = () => {
           </S.Description>
         </S.Contents>
       </S.Wrapper>
-      <Button
+      {/* <Button
         id="notFoundBtn"
         variant="outlined"
         onClick={onClickHome}
@@ -45,7 +46,8 @@ export const NotFound = () => {
         }}
       >
         돌아가기
-      </Button>
+      </Button> */}
+      <FdrButton outline={false} type={"reset"} btnTitle={"돌아가기"} onClick={onClickHome} />
     </S.Container>
   );
 };

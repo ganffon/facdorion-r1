@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import TextField from "@mui/material/TextField";
 import { Autocomplete } from "@mui/material";
-import { color } from "constant/color/color";
+import { palette } from "constant/color/color";
 import * as A from "style/animation/animation";
 
 export const FdrInput = styled(TextField)`
@@ -20,10 +20,10 @@ export const FdrButton = styled("button")`
   ${(props) => (props.width ? `width: ${props.width};` : "")}
   height: ${(props) => props.height};
   padding: 0px 15px;
-  background: ${(props) => (props.outline ? color.button.outline.background : color.button.fill.background)};
-  border: 1px solid ${(props) => (props.outline ? color.button.outline.border : color.button.fill.border)};
+  background: ${($props) => $props.$background};
+  border: 1px solid ${($props) => $props.$border};
   border-radius: 5px;
-  color: ${(props) => (props.outline ? color.button.outline.font : color.button.fill.font)};
+  color: ${($props) => $props.$fontColor};
   display: flex;
   align-items: center;
   gap: 5px;
@@ -36,8 +36,115 @@ export const FdrButton = styled("button")`
 `;
 
 export const ButtonImg = styled("img")`
-  ${(props) =>
-    props.outline
-      ? "filter: invert(57%) sepia(75%) saturate(1135%) hue-rotate(184deg) brightness(84%) contrast(87%);"
-      : "filter: brightness(0) invert(1);"}
+  fill: ${($props) => $props.$fontColor};
 `;
+
+export const FdrBackDrop = styled("div")`
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10000;
+  background: rgb(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+`;
+
+export const Wait = styled("img")`
+  scale: 0.8;
+`;
+export const LoadingWrap = styled("div")`
+  display: flex;
+  gap: 20px;
+  align-items: end;
+`;
+
+export const Loading = styled("img")`
+  display: flex;
+  align-items: end;
+
+  &.dot {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 40px;
+  }
+  &.dori {
+    width: 200px;
+    height: 200px;
+  }
+  animation: ${A.loading} 1s infinite;
+
+  &:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+  &:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  &:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+  &:nth-child(4) {
+    animation-delay: 0.4s;
+  }
+`;
+export const BackDrop = styled("img")`
+  height: 50px;
+  width: 50px;
+  animation: ${A.rotate} 1s infinite linear;
+`;
+
+export const FdrSnackBar = styled("div")`
+  position: absolute;
+  z-index: 9999;
+  height: 50px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 20px;
+
+  border-radius: 5px;
+
+  color: white;
+  font-size: 20px;
+  font-weight: 500;
+
+  box-shadow: 1px 1px 5px ${palette.black[500]};
+
+  &.error {
+    animation: ${A.slideDownToUp} 0.5s linear;
+    bottom: 20px;
+    right: 20px;
+    background: ${palette.red[500]};
+  }
+  &.success {
+    animation: ${A.slideDownToUp} 0.5s linear;
+    bottom: 20px;
+    right: 20px;
+    background: ${palette.green[500]};
+  }
+  &.warning {
+    animation: ${A.slideUpToDown} 0.5s linear;
+    top: 20px;
+    right: 50%;
+    transform: translateX(50%);
+    background: ${palette.orange[500]};
+  }
+  &.information {
+    animation: ${A.slideUpToDown} 0.5s linear;
+    top: 20px;
+    right: 50%;
+    transform: translateX(50%);
+    background: ${palette.blue[500]};
+  }
+`;
+export const snackBarIcon = styled("img")``;
+// ${($props) =>
+//   $props.$outline
+//     ? "filter: invert(57%) sepia(75%) saturate(1135%) hue-rotate(184deg) brightness(84%) contrast(87%);"
+//     : "filter: brightness(0) invert(1);"}

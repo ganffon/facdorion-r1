@@ -1,21 +1,23 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as S from "../fdrComponents.styled";
-import searchIcon from "img/button/search.svg";
-import addRowIcon from "img/button/addRow.svg";
-import cancelRowIcon from "img/button/cancelRow.svg";
-import deleteIcon from "img/button/delete.svg";
-import editIcon from "img/button/edit.svg";
-import newIcon from "img/button/new.svg";
-import saveIcon from "img/button/save.svg";
-import mappingIcon from "img/button/mapping.svg";
-import vectorIcon from "img/button/vector.svg";
-import okIcon from "img/button/ok.svg";
-import cancelIcon from "img/button/cancel.svg";
-import syncIcon from "img/button/sync.svg";
-import downloadIcon from "img/button/download.svg";
-import detailIcon from "img/button/detail.svg";
-import cleanIcon from "img/button/clean.svg";
-import calculateIcon from "img/button/calculate.svg";
+import { palette } from "constant/color/color";
+import { ReactComponent as SearchIcon } from "img/button/search.svg";
+import { ReactComponent as AddRowIcon } from "img/button/addRow.svg";
+import { ReactComponent as CancelRowIcon } from "img/button/cancelRow.svg";
+import { ReactComponent as DeleteIcon } from "img/button/delete.svg";
+import { ReactComponent as EditIcon } from "img/button/edit.svg";
+import { ReactComponent as NewIcon } from "img/button/new.svg";
+import { ReactComponent as SaveIcon } from "img/button/save.svg";
+import { ReactComponent as MappingIcon } from "img/button/mapping.svg";
+import { ReactComponent as VectorIcon } from "img/button/vector.svg";
+import { ReactComponent as OkIcon } from "img/button/ok.svg";
+import { ReactComponent as CancelIcon } from "img/button/cancel.svg";
+import { ReactComponent as SyncIcon } from "img/button/sync.svg";
+import { ReactComponent as DownloadIcon } from "img/button/download.svg";
+import { ReactComponent as DetailIcon } from "img/button/detail.svg";
+import { ReactComponent as CleanIcon } from "img/button/clean.svg";
+import { ReactComponent as CalculateIcon } from "img/button/calculate.svg";
+import { ReactComponent as ResetIcon } from "img/button/reset.svg";
 
 function FdrButton(props) {
   const {
@@ -27,77 +29,134 @@ function FdrButton(props) {
     className = "",
     type = "",
     outline = true,
+    onClick = () => {},
+    btnTitle = "",
+    color = "",
   } = props;
 
+  let background, border, fontColor;
+  switch (color) {
+    case "success":
+      if (outline) {
+        background = palette.white;
+        border = palette.green[500];
+        fontColor = palette.green[500];
+      } else {
+        background = palette.green[500];
+        border = palette.green[100];
+        fontColor = palette.white;
+      }
+      break;
+    case "error":
+      if (outline) {
+        background = palette.white;
+        border = palette.red[400];
+        fontColor = palette.red[400];
+      } else {
+        background = palette.red[400];
+        border = palette.red[100];
+        fontColor = palette.white;
+      }
+      break;
+    case "warning":
+      if (outline) {
+        background = palette.white;
+        border = palette.orange[500];
+        fontColor = palette.orange[500];
+      } else {
+        background = palette.orange[500];
+        border = palette.orange[100];
+        fontColor = palette.white;
+      }
+      break;
+    default:
+      if (outline) {
+        background = palette.white;
+        border = palette.blue[400];
+        fontColor = palette.blue[400];
+      } else {
+        background = palette.blue[400];
+        border = palette.blue[100];
+        fontColor = palette.white;
+      }
+  }
   let btnName, img;
   switch (type) {
     case "search":
-      img = searchIcon;
+      img = <SearchIcon fill={fontColor} />;
       btnName = "검색";
       break;
     case "addRow":
-      img = addRowIcon;
+      img = <AddRowIcon fill={fontColor} />;
       btnName = "행 추가";
       break;
     case "cancelRow":
-      img = cancelRowIcon;
+      img = <CancelRowIcon fill={fontColor} />;
       btnName = "행 취소";
       break;
     case "delete":
-      img = deleteIcon;
+      img = <DeleteIcon fill={fontColor} />;
       btnName = "삭제";
       break;
     case "edit":
-      img = editIcon;
+      img = <EditIcon fill={fontColor} />;
       btnName = "수정";
       break;
     case "new":
-      img = newIcon;
+      img = <NewIcon fill={fontColor} />;
       btnName = "신규";
       break;
     case "save":
-      img = saveIcon;
+      img = <SaveIcon fill={fontColor} />;
       btnName = "저장";
       break;
     case "mapping":
-      img = mappingIcon;
+      img = <MappingIcon fill={fontColor} />;
       btnName = "데이터 맵핑";
       break;
     case "vector":
-      img = vectorIcon;
+      img = <VectorIcon fill={fontColor} />;
       btnName = "그래프";
       break;
     case "ok":
-      img = okIcon;
+      img = <OkIcon fill={fontColor} />;
       btnName = "확인";
       break;
     case "cancel":
-      img = cancelIcon;
+      img = <CancelIcon fill={fontColor} />;
       btnName = "취소";
       break;
     case "sync":
-      img = syncIcon;
+      img = <SyncIcon fill={fontColor} />;
       btnName = "동기화";
       break;
     case "download":
-      img = downloadIcon;
+      img = <DownloadIcon fill={fontColor} />;
       btnName = "다운로드";
       break;
     case "detail":
-      img = detailIcon;
+      img = <DetailIcon fill={fontColor} />;
       btnName = "상세보기";
       break;
     case "clean":
-      img = cleanIcon;
+      img = <CleanIcon fill={fontColor} />;
       btnName = "라인 청소";
       break;
     case "calculate":
-      img = calculateIcon;
+      img = <CalculateIcon fill={fontColor} />;
       btnName = "계산";
       break;
+    case "reset":
+      img = <ResetIcon fill={fontColor} />;
+      btnName = "초기화";
+      break;
     default:
+      img = null;
+      btnName = "";
   }
-
+  if (btnTitle !== "") {
+    btnName = btnTitle;
+  }
   const [isClickAnimation, setIsClickAnimation] = useState(false);
   const playClickAnimation = () => {
     setIsClickAnimation(true);
@@ -109,16 +168,21 @@ function FdrButton(props) {
   return (
     <S.FdrButton
       id={id}
-      outline={outline}
+      $outline={outline}
       disabled={disabled}
       className={isClickAnimation ? `${className} click` : className}
       onClick={() => {
         playClickAnimation();
+        onClick();
       }}
       width={width}
       height={height}
+      $background={background}
+      $border={border}
+      $fontColor={fontColor}
     >
-      <S.ButtonImg src={img} outline={outline} />
+      {/* <S.ButtonImg src={img} $outline={outline} /> */}
+      {img}
       {btnName}
     </S.FdrButton>
   );

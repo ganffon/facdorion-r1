@@ -9,8 +9,10 @@ import { restGet } from "api/rest";
 import { useLine } from "functions/getCboList/getCboList";
 import Contents from "components/layout/frame/contents";
 import FdrButton from "components/button/fdrButton";
+import { LayoutContext } from "components/layout/layout";
 
 export function Line(props) {
+  const { backDrop, snackBar } = useContext(LayoutContext);
   const [lineList] = useLine();
   const filterReducer = (filter, action) => {
     switch (action.type) {
@@ -56,30 +58,41 @@ export function Line(props) {
     return reverseValueText(newList, "line_id", "line_nm");
   }, [newList]);
 
+  const onSearch = () => {
+    snackBar.set({ ...snackBar.state, open: true, type: "error" });
+    // setTimeout(() => {
+    //   snackBar.set({ ...snackBar.state, open: false });
+    // }, 4000);
+    backDrop.set(true);
+    setTimeout(() => {
+      backDrop.set(false);
+    }, 10000);
+  };
+
   return (
     <Contents>
       <S.Header>
         {/* <FdrDate id={"startDate"} label={"조회기간"} value={filter.startDate} dispatch={filterDispatch} />
-        <FdrDate id={"endDate"} value={filter.endDate} dispatch={filterDispatch} />
+        <FdrDate id={"endDate"} limit={"after"} value={filter.endDate} dispatch={filterDispatch} />
         <FdrInput id={"aInput"} label={"A Input"} value={filter.aInput} dispatch={filterDispatch} />
         <FdrInput id={"bInput"} label={"B Input"} value={filter.bInput} dispatch={filterDispatch} />
         <FdrCombo id={"aCombo"} label={"test"} list={lineList} value={filter.aCombo} dispatch={filterDispatch} /> */}
-        <FdrButton type={"search"} outline={false} />
+        <FdrButton type={"search"} outline={false} onClick={onSearch} />
         <FdrButton type={"addRow"} />
-        <FdrButton type={"cancelRow"} />
-        <FdrButton type={"delete"} />
-        <FdrButton type={"edit"} />
-        <FdrButton type={"new"} />
-        <FdrButton type={"save"} />
-        <FdrButton type={"mapping"} />
-        <FdrButton type={"vector"} />
-        <FdrButton type={"ok"} />
-        <FdrButton type={"cancel"} />
-        <FdrButton type={"sync"} />
-        <FdrButton type={"download"} />
-        <FdrButton type={"detail"} />
-        <FdrButton type={"clean"} />
-        <FdrButton type={"calculate"} />
+        <FdrButton type={"cancelRow"} color={"success"} outline={false} />
+        <FdrButton type={"delete"} color={"success"} />
+        <FdrButton type={"edit"} color={"warning"} outline={false} />
+        <FdrButton type={"new"} color={"warning"} />
+        <FdrButton type={"save"} color={"error"} outline={false} />
+        <FdrButton type={"mapping"} color={"error"} />
+        {/* <FdrButton type={"vector"} color={"success"} />
+        <FdrButton type={"ok"} color={"success"} />
+        <FdrButton type={"cancel"} color={"success"} />
+        <FdrButton type={"sync"} color={"warning"} outline={false} />
+        <FdrButton type={"download"} color={"warning"} outline={false} />
+        <FdrButton type={"detail"} color={"warning"} outline={false} />
+        <FdrButton type={"clean"} color={"warning"} outline={false} />
+        <FdrButton type={"reset"} color={"warning"} outline={false} /> */}
       </S.Header>
       <S.Main></S.Main>
     </Contents>
