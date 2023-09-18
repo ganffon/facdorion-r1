@@ -9,61 +9,9 @@ import { restGet } from "api/rest";
 import { useLine } from "functions/getCboList/getCboList";
 
 export function Process(props) {
-  const [lineList] = useLine();
-  const filterReducer = (filter, action) => {
-    switch (action.type) {
-      case "update":
-        return { ...filter, [action.id]: action.value };
-      case "reset":
-        return { ...{ startDate: getDt(-7).dateFull, endDate: getDt.dateFull } };
-      default:
-        return filter;
-    }
-  };
-  const [filter, filterDispatch] = useReducer(filterReducer, {
-    startDate: getDt(-7).dateFull,
-    endDate: getDt.dateFull,
-  });
-
-  const onClick = async (e) => {
-    // filterDispatch({ type: "update", id: "aInput", value: "CCC" });
-    // filterDispatch({ type: "update", id: "bInput", value: "DDD" });
-    const params = {
-      // start_date: filter.startDate,
-      // end_date: filter.endDate,
-      line_nm2: filter.aInput,
-      prod_nm: filter.bInput,
-      model_nm: filter.aCombo?.key,
-    };
-    const result = await restGet("/std/line", params);
-    console.log(result.flag);
-    console.log(result.res);
-  };
-  useEffect(() => {}, []);
-
-  const origin = [
-    { line_id: "id1", line_nm: "line1" },
-    { line_id: "id2", line_nm: "line2" },
-    { line_id: "id3", line_nm: "line3" },
-  ];
-  const newList = useMemo(() => {
-    return convertValueText(origin, "line_id", "line_nm");
-  }, [origin]);
-
-  const reverseList = useMemo(() => {
-    return reverseValueText(newList, "line_id", "line_nm");
-  }, [newList]);
-
   return (
     <S.Contents>
-      <S.Header>
-        <FdrDate id={"startDate"} label={"조회기간"} value={filter.startDate} dispatch={filterDispatch} />
-        <FdrDate id={"endDate"} value={filter.endDate} dispatch={filterDispatch} />
-        <FdrInput id={"aInput"} label={"A Input"} value={filter.aInput} dispatch={filterDispatch} />
-        <FdrInput id={"bInput"} label={"B Input"} value={filter.bInput} dispatch={filterDispatch} />
-        <FdrCombo id={"aCombo"} label={"test"} list={lineList} value={filter.aCombo} dispatch={filterDispatch} />
-        <S.Btn onClick={onClick} />
-      </S.Header>
+      <S.Header></S.Header>
     </S.Contents>
   );
 }

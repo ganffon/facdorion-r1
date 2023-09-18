@@ -21,8 +21,8 @@ export const Main = styled("main")`
   border-radius: 10px;
   box-shadow: 1px 1px 5px ${palette.black[500]};
   display: flex;
-  align-items: center;
-  padding: 10px;
+  flex-direction: column;
+  align-items: end;
   gap: 10px;
 `;
 

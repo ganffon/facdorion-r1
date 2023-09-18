@@ -27,61 +27,61 @@ function FdrButton(props) {
     disabled = false,
     value = null,
     className = "",
-    type = "",
-    outline = true,
+    name = "",
+    fill = false,
     onClick = () => {},
     btnTitle = "",
-    color = "",
+    type = "",
   } = props;
 
   let background, border, fontColor;
-  switch (color) {
+  switch (type) {
     case "success":
-      if (outline) {
-        background = palette.white;
-        border = palette.green[500];
-        fontColor = palette.green[500];
-      } else {
+      if (fill) {
         background = palette.green[500];
         border = palette.green[100];
         fontColor = palette.white;
+      } else {
+        background = palette.white;
+        border = palette.green[500];
+        fontColor = palette.green[500];
       }
       break;
     case "error":
-      if (outline) {
-        background = palette.white;
-        border = palette.red[400];
-        fontColor = palette.red[400];
-      } else {
+      if (fill) {
         background = palette.red[400];
         border = palette.red[100];
         fontColor = palette.white;
+      } else {
+        background = palette.white;
+        border = palette.red[400];
+        fontColor = palette.red[400];
       }
       break;
     case "warning":
-      if (outline) {
-        background = palette.white;
-        border = palette.orange[500];
-        fontColor = palette.orange[500];
-      } else {
+      if (fill) {
         background = palette.orange[500];
         border = palette.orange[100];
         fontColor = palette.white;
+      } else {
+        background = palette.white;
+        border = palette.orange[500];
+        fontColor = palette.orange[500];
       }
       break;
     default:
-      if (outline) {
-        background = palette.white;
-        border = palette.blue[400];
-        fontColor = palette.blue[400];
-      } else {
+      if (fill) {
         background = palette.blue[400];
         border = palette.blue[100];
         fontColor = palette.white;
+      } else {
+        background = palette.white;
+        border = palette.blue[400];
+        fontColor = palette.blue[400];
       }
   }
   let btnName, img;
-  switch (type) {
+  switch (name) {
     case "search":
       img = <SearchIcon fill={fontColor} />;
       btnName = "검색";
@@ -168,7 +168,6 @@ function FdrButton(props) {
   return (
     <S.FdrButton
       id={id}
-      $outline={outline}
       disabled={disabled}
       className={isClickAnimation ? `${className} click` : className}
       onClick={() => {
@@ -181,7 +180,6 @@ function FdrButton(props) {
       $border={border}
       $fontColor={fontColor}
     >
-      {/* <S.ButtonImg src={img} $outline={outline} /> */}
       {img}
       {btnName}
     </S.FdrButton>

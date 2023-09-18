@@ -15,7 +15,7 @@ const getParams = (params) => {
   return query.length ? "?" + query.join("&") : "";
 };
 
-const restGet = async (uri, params) => {
+const restGet = async (uri, params = "") => {
   try {
     const result = await restAPI.get(uri + getParams(params));
     return { flag: true, res: result?.data?.data?.rows };

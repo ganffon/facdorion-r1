@@ -110,8 +110,8 @@ export const FdrSnackBar = styled("div")`
 
   border-radius: 5px;
 
-  color: white;
-  font-size: 20px;
+  color: ${palette.white};
+  font-size: 16px;
   font-weight: 500;
 
   box-shadow: 1px 1px 5px ${palette.black[500]};
@@ -144,7 +144,17 @@ export const FdrSnackBar = styled("div")`
   }
 `;
 export const snackBarIcon = styled("img")``;
-// ${($props) =>
-//   $props.$outline
-//     ? "filter: invert(57%) sepia(75%) saturate(1135%) hue-rotate(184deg) brightness(84%) contrast(87%);"
-//     : "filter: brightness(0) invert(1);"}
+
+export const FdrGrid = styled("div")`
+  width: 100%;
+  height: 100%;
+  padding: 15px;
+
+  & .selectedBack {
+    background-color: ${palette.skyBlue[100]};
+  }
+
+  & .redText {
+    color: ${palette.red[500]};
+  }
+`;

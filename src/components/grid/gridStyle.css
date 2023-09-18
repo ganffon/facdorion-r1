@@ -1,0 +1,38 @@
+.checkbox {
+  cursor: pointer;
+  transform: scale(2);
+  /* display: table; */
+  /* position: relative; */
+  /* left: 43%; */
+  accent-color: #f5329498;
+}
+.customButton {
+  width: 80%;
+  height: 25px;
+  font-family: "NotoSansKR";
+  border-radius: 5px;
+  border: 1px solid gray;
+  cursor: pointer;
+}
+.grid__button--apply {
+  background: #f8c1d6;
+}
+.grid__button--disabled {
+  cursor: not-allowed;
+}
+
+.number {
+  height: 80%;
+  width: 95%;
+}
+
+.columnHeaderMultiLine {
+  white-space: pre;
+}
+.tui-grid-container {
+  font-family: "NotoSansKR";
+}
+
+/* .checkbox :disabled {
+  accent-color: #f532cb99 !important;
+} */
