@@ -36,7 +36,7 @@ function FdrSnackBar(props) {
   useEffect(() => {
     if (snackBar.state.open) {
       setTimeout(() => {
-        snackBar.set({ ...snackBar.state, open: false });
+        snackBar.set({ ...snackBar.state, open: false, message: "" });
       }, 4000);
     }
   }, [snackBar.state.open]);
@@ -44,7 +44,7 @@ function FdrSnackBar(props) {
   return (
     <S.FdrSnackBar className={className}>
       <S.snackBarIcon src={icon} />
-      {"서버 통신 500 코드 반환"}
+      {snackBar.state.message}
     </S.FdrSnackBar>
   );
 }

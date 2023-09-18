@@ -8,14 +8,6 @@ export const ContentsHidden = styled("div")`
   padding: 15px 30px 15px 15px;
   font-family: NotoSansKR;
   overflow: hidden auto;
-
-  & .redText {
-    color: red;
-  }
-
-  & .selectedBack {
-    background-color: ${palette.red[100]};
-  }
 `;
 
 export const ContentsFlex = styled("div")`

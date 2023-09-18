@@ -2,8 +2,8 @@ import React, { useState, createContext, useCallback, useMemo, useEffect } from 
 import AppBar from "./header/appBar";
 import * as S from "./layout.styled";
 import Menu from "./nav/menu";
-import FdrBackDrop from "components/backDrop/backDrop";
-import FdrSnackBar from "components/snackBar/snackBar";
+import FdrBackDrop from "components/backDrop/fdrBackDrop";
+import FdrSnackBar from "components/snackBar/fdrSnackBar";
 
 export const LayoutContext = createContext();
 

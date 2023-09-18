@@ -1,12 +1,9 @@
-//라인관리✨
-import restURI from "json/restURI.json";
 import CN from "json/ColumnName.json";
-import * as CustomGrid from "components/grid/setting/CustomGrid";
-import "components/grid/setting/GridStyle.css";
+import "components/grid/gridStyle.css";
 import * as C from "constant/Grid.js";
-import * as col from "custom/GridColumnSet";
+import * as col from "components/grid/gridColumn";
 
-function LineSet(isEditMode) {
+function LineSet(isEditMode, ref) {
   const data = [];
   const rowHeaders = ["checkbox", "rowNum"];
   const rowHeadersModal = ["rowNum"];
@@ -21,12 +18,12 @@ function LineSet(isEditMode) {
    * filter: false||"select"||{type:"text",operator:"OR"}
    */
   const columns = [
-    col.id("factory_id", CN.factory_id, C.HIDDEN_ID),
-    col.id("line_id", CN.line_id, C.HIDDEN_ID),
+    col.id("factory_id", CN.factory_id),
+    col.id("line_id", CN.line_id),
     col.text("line_cd", CN.line_cd, C.U, C.U, C.WIDTH_MIDDLE),
-    col.text("line_nm", CN.line_nm, false, C.U, C.WIDTH_MIDDLE),
+    col.text("line_nm", CN.line_nm, isEditMode, C.U, C.WIDTH_MIDDLE),
     // col.button("button", "버튼", "On", onButton),
-    col.check("rework_fg", CN.rework_fg, isEditMode),
+    col.check("rework_fg", CN.rework_fg, isEditMode, ref),
     col.text("create_at", CN.create_at, C.U, C.U, C.WIDTH_LONG, "center"),
     col.text("create_user_nm", CN.create_user_nm, C.U, C.U, C.U, "center"),
     col.text("update_at", CN.update_at, C.U, C.U, C.WIDTH_LONG, "center"),
