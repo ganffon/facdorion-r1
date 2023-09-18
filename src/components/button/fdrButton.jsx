@@ -23,11 +23,10 @@ function FdrButton(props) {
   const {
     height = "40px",
     width = "",
-    id,
     disabled = false,
     value = null,
     className = "",
-    name = "",
+    id = "",
     fill = false,
     onClick = () => {},
     btnTitle = "",
@@ -81,7 +80,7 @@ function FdrButton(props) {
       }
   }
   let btnName, img;
-  switch (name) {
+  switch (id) {
     case "search":
       img = <SearchIcon fill={fontColor} />;
       btnName = "검색";

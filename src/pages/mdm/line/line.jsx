@@ -13,6 +13,8 @@ import { LayoutContext } from "components/layout/layout";
 import FdrGrid from "components/grid/fdrGrid";
 import LineSet from "./line.set";
 import { oneAddRow, addRow, removeRow } from "components/grid/gridFunc";
+import FdrRadio from "components/radio/fdrRadio";
+import FdrCheckBox from "components/checkBox/fdrCheckBox";
 
 export function Line(props) {
   const { backDrop, snackBar } = useContext(LayoutContext);
@@ -50,8 +52,6 @@ export function Line(props) {
       model_nm: filter.aCombo?.key,
     };
     const result = await restGet("/std/line", params);
-    console.log(result.flag);
-    console.log(result.res);
   };
   useEffect(() => {}, []);
 
@@ -80,9 +80,17 @@ export function Line(props) {
     //   backDrop.set(false);
     // }, 8000);
 
+    const params = {
+      line_nm2: filter.aInput,
+      prod_nm: filter.bInput,
+      model_nm: filter.aCombo?.value,
+      subtotal: filter.radioTest,
+      check: filter.checkTest,
+    };
+
     try {
       backDrop.set(true);
-      const data = await restGet("/std/line");
+      const data = await restGet("/std/line", params);
       setGridData(data.res);
     } catch (err) {
       alert(err);
@@ -106,37 +114,50 @@ export function Line(props) {
   return (
     <Contents>
       <S.Header>
-        {/* <FdrDate id={"startDate"} label={"조회기간"} value={filter.startDate} dispatch={filterDispatch} />
+        <FdrDate id={"startDate"} label={"조회기간"} value={filter.startDate} dispatch={filterDispatch} />
         <FdrDate id={"endDate"} limit={"after"} value={filter.endDate} dispatch={filterDispatch} />
         <FdrInput id={"aInput"} label={"A Input"} value={filter.aInput} dispatch={filterDispatch} />
         <FdrInput id={"bInput"} label={"B Input"} value={filter.bInput} dispatch={filterDispatch} />
-        <FdrCombo id={"aCombo"} label={"test"} list={lineList} value={filter.aCombo} dispatch={filterDispatch} /> */}
-        <FdrButton name={"search"} onClick={onSearch} fill={true} />
-        <FdrButton name={"addRow"} />
-        <FdrButton name={"cancelRow"} type={"success"} onClick={onCancelRow} />
-        <FdrButton name={"delete"} type={"success"} />
+        <FdrCombo id={"aCombo"} label={"test"} list={lineList} value={filter.aCombo} dispatch={filterDispatch} />
+        <FdrRadio
+          id={"radioTest"}
+          label={"소계"}
+          value={{ prod: "품목", model: "제품군" }}
+          dispatch={filterDispatch}
+          defaultCheckedIndex={1}
+        />
+        <FdrCheckBox
+          id={"checkTest"}
+          label={"소계"}
+          value={{ test1: "품목", test2: "제품군" }}
+          dispatch={filterDispatch}
+        />
+        <FdrButton id={"search"} onClick={onSearch} fill={true} />
+        {/* <FdrButton id={"addRow"} />
+        <FdrButton id={"cancelRow"} type={"success"} onClick={onCancelRow} />
+        <FdrButton id={"delete"} type={"success"} />
         <FdrButton
-          name={"edit"}
+          id={"edit"}
           type={"warning"}
           onClick={() => {
             setIsEditMode(true);
           }}
         />
-        <FdrButton name={"new"} type={"warning"} />
-        <FdrButton name={"save"} type={"error"} />
-        <FdrButton name={"mapping"} type={"error"} />
-        {/* <FdrButton name={"vector"} type={"success"} />
-        <FdrButton name={"ok"} type={"success"} />
-        <FdrButton name={"cancel"} type={"success"} />
-        <FdrButton name={"sync"} type={"warning"}  />
-        <FdrButton name={"download"} type={"warning"}  />
-        <FdrButton name={"detail"} type={"warning"}  />
-        <FdrButton name={"clean"} type={"warning"}  />
-        <FdrButton name={"reset"} type={"warning"}  /> */}
+        <FdrButton id={"new"} type={"warning"} />
+        <FdrButton id={"save"} type={"error"} />
+        <FdrButton id={"mapping"} type={"error"} /> */}
+        {/* <FdrButton id={"vector"} type={"success"} />
+        <FdrButton id={"ok"} type={"success"} />
+        <FdrButton id={"cancel"} type={"success"} />
+        <FdrButton id={"sync"} type={"warning"}  />
+        <FdrButton id={"download"} type={"warning"}  />
+        <FdrButton id={"detail"} type={"warning"}  />
+        <FdrButton id={"clean"} type={"warning"}  />
+        <FdrButton id={"reset"} type={"warning"}  /> */}
       </S.Header>
       <S.Main>
-        <FdrButton name={"addRow"} onClick={onAddRow} />
-        <FdrButton name={"save"} onClick={onSave} />
+        <FdrButton id={"addRow"} onClick={onAddRow} />
+        <FdrButton id={"save"} onClick={onSave} />
         <FdrGrid
           columnOptions={columnOptions}
           columns={columns}

@@ -158,3 +158,69 @@ export const FdrGrid = styled("div")`
     color: ${palette.red[500]};
   }
 `;
+
+export const FdrRadio = styled("div")`
+  height: 40px;
+  display: flex;
+  align-items: center;
+
+  padding: 5px;
+  border: 1px solid ${palette.black[300]};
+  border-radius: 5px;
+  position: relative;
+  cursor: pointer;
+  &:hover {
+    border: 1px solid ${palette.black[900]};
+  }
+`;
+export const RadioLabel = styled("div")`
+  position: absolute;
+  top: -10px;
+  left: 10px;
+  font-size: 0.8rem;
+  color: ${palette.black[500]};
+  background: ${palette.white};
+`;
+export const RadioWrap = styled("div")`
+  display: flex;
+`;
+export const Radio = styled("input")`
+  cursor: pointer;
+`;
+export const RadioText = styled("label")`
+  cursor: pointer;
+  margin-right: 5px;
+`;
+
+export const FdrCheckBox = styled("div")`
+  height: 40px;
+  display: flex;
+  align-items: center;
+
+  padding: 5px;
+  border: 1px solid ${palette.black[300]};
+  border-radius: 5px;
+  position: relative;
+  cursor: pointer;
+  &:hover {
+    border: 1px solid ${palette.black[900]};
+  }
+`;
+export const CheckBoxWrap = styled("div")`
+  display: flex;
+`;
+export const CheckBox = styled("input")`
+  cursor: pointer;
+`;
+export const CheckBoxLabel = styled("div")`
+  position: absolute;
+  top: -10px;
+  left: 10px;
+  font-size: 0.8rem;
+  color: ${palette.black[500]};
+  background: ${palette.white};
+`;
+export const CheckBoxText = styled("label")`
+  cursor: pointer;
+  margin-right: 5px;
+`;
