@@ -21,7 +21,7 @@ export const Menu = styled("nav")`
   width: ${width.MENU};
   display: ${($props) => ($props.$isMenuSlide ? "none" : "static")};
 
-  background: ${palette.blue[800]};
+  background: ${palette.navy[800]};
 
   padding: 10px 5px;
 `;
@@ -39,12 +39,12 @@ export const MenuWrap = styled("div")`
   align-items: center;
 
   &:hover {
-    background: ${palette.blue[700]};
+    background: ${palette.navy[700]};
     border-radius: 10px;
     cursor: pointer;
   }
   &.selected {
-    background: ${palette.blue[700]};
+    background: ${palette.navy[700]};
     border-radius: 10px;
     cursor: pointer;
   }

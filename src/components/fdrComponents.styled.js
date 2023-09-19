@@ -140,7 +140,7 @@ export const FdrSnackBar = styled("div")`
     top: 20px;
     right: 50%;
     transform: translateX(50%);
-    background: ${palette.blue[500]};
+    background: ${palette.navy[500]};
   }
 `;
 export const snackBarIcon = styled("img")``;

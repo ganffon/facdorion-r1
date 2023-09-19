@@ -70,13 +70,13 @@ function FdrButton(props) {
       break;
     default:
       if (fill) {
-        background = palette.blue[400];
-        border = palette.blue[100];
+        background = palette.navy[400];
+        border = palette.navy[100];
         fontColor = palette.white;
       } else {
         background = palette.white;
-        border = palette.blue[400];
-        fontColor = palette.blue[400];
+        border = palette.navy[400];
+        fontColor = palette.navy[400];
       }
   }
   let btnName, img;
