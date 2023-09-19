@@ -63,7 +63,7 @@ export const StepSingle = styled("div")`
   font-family: NotoSansKR;
   font-style: normal;
   font-weight: 900;
-  color: ${palette.blue[900]};
+  color: ${palette.navy[900]};
 `;
 export const StepHeader = styled("div")`
   display: flex;
@@ -80,7 +80,7 @@ export const StepMain = styled("div")`
   font-family: NotoSansKR;
   font-style: normal;
   font-weight: 900;
-  color: ${palette.blue[900]};
+  color: ${palette.navy[900]};
 `;
 export const Bookmark = styled("span")`
   font-size: 25px;

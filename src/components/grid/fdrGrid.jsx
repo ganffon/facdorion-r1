@@ -51,7 +51,9 @@ const FdrGrid = forwardRef((props, ref) => {
   };
 
   useEffect(() => {
-    ref.current.gridInst.refreshLayout();
+    if (ref) {
+      ref.current.gridInst.refreshLayout();
+    }
   }, [menuSlide.state]);
 
   return (
@@ -68,7 +70,7 @@ const FdrGrid = forwardRef((props, ref) => {
         data={data}
         header={header}
         draggable={draggable}
-        ref={ref}
+        ref={ref || null}
         onClick={(e) => {
           onClick(e);
           handleFocus();

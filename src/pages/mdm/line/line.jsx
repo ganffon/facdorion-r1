@@ -107,8 +107,8 @@ export function Line(props) {
     removeRow(refGrid);
   };
   const onSave = () => {
-    const edit = refGrid.current.gridInst.getModifiedRows();
-    alert(`신규 : ${edit.createdRows.length} 건 / 수정 : ${edit.updatedRows.length} 건`);
+    // const edit = refGrid?.current?.gridInst?.getModifiedRows();
+    // alert(`신규 : ${edit.createdRows.length} 건 / 수정 : ${edit.updatedRows.length} 건`);
   };
 
   return (
@@ -129,7 +129,7 @@ export function Line(props) {
         <FdrCheckBox
           id={"checkTest"}
           label={"소계"}
-          value={{ test1: "품목", test2: "제품군" }}
+          value={{ 품목: "품목", 제품군: "제품군" }}
           dispatch={filterDispatch}
         />
         <FdrButton id={"search"} onClick={onSearch} fill={true} />

@@ -344,59 +344,67 @@ export const copyRow = (refGrid, setGridData, columns, copyColumnNames, btnRowKe
     setGridData(copiedData);
   }
 };
-export const cancelRow = (refGrid, setGridData, btnRowKey = null) => {
-  let rowKey = null;
-  if (!btnRowKey) {
-    rowKey = refGrid?.current?.gridInst?.getFocusedCell().rowKey; //현재 선택된 cell의 rowKey 가져오기
-  } else {
-    rowKey = btnRowKey;
-  }
-  if (rowKey) {
-    refGrid?.current?.gridInst?.removeRow(rowKey); // 일단 지우고
-    const targetGridData = refGrid?.current?.gridInst?.getData(); //현재 Grid Data 모두 가져오기
-    targetGridData.forEach((item) => {
-      item.copyRow = item.copyRow === 1 ? 1 : 0;
-      item.cancelRow = item.cancelRow === 1 ? 1 : 0;
-    });
-    const cancelData = targetGridData.map((item, index) => {
-      //최종적으로 만들어진 데이터에 uniqueKey와 rowKey를 재선언함
-      return { ...item, uniqueKey: `@dataKey${Date.now()}-${index}`, rowKey: index };
-    });
-    setGridData(cancelData);
+export const cancelRow = (ref, setGridData, btnRowKey = null) => {
+  if (ref) {
+    let rowKey = null;
+    if (!btnRowKey) {
+      rowKey = ref?.current?.gridInst?.getFocusedCell().rowKey; //현재 선택된 cell의 rowKey 가져오기
+    } else {
+      rowKey = btnRowKey;
+    }
+    if (rowKey) {
+      ref?.current?.gridInst?.removeRow(rowKey); // 일단 지우고
+      const targetGridData = ref?.current?.gridInst?.getData(); //현재 Grid Data 모두 가져오기
+      targetGridData.forEach((item) => {
+        item.copyRow = item.copyRow === 1 ? 1 : 0;
+        item.cancelRow = item.cancelRow === 1 ? 1 : 0;
+      });
+      const cancelData = targetGridData.map((item, index) => {
+        //최종적으로 만들어진 데이터에 uniqueKey와 rowKey를 재선언함
+        return { ...item, uniqueKey: `@dataKey${Date.now()}-${index}`, rowKey: index };
+      });
+      setGridData(cancelData);
+    }
   }
 };
 
 export const addRow = (ref) => {
-  ref?.current?.gridInst?.appendRow({ isAppend: true });
-  const lastRowIndex = ref?.current?.gridInst?.getRowCount() - 1;
-  ref?.current?.gridInst?.focus(lastRowIndex, 0);
+  if (ref) {
+    ref?.current?.gridInst?.appendRow({ isAppend: true });
+    const lastRowIndex = ref?.current?.gridInst?.getRowCount() - 1;
+    ref?.current?.gridInst?.focus(lastRowIndex, 0);
+  }
 };
 
 export const oneAddRow = (ref) => {
-  const allRows = ref?.current?.gridInst?.store?.data?.rawData;
-  const hasAppendedRow = allRows?.some((row) => row.isAppend);
-  if (hasAppendedRow) {
-    return;
+  if (ref) {
+    const allRows = ref?.current?.gridInst?.store?.data?.rawData;
+    const hasAppendedRow = allRows?.some((row) => row.isAppend);
+    if (hasAppendedRow) {
+      return;
+    }
+    ref?.current?.gridInst?.appendRow({ isAppend: true });
+    const lastRowIndex = ref?.current?.gridInst?.getRowCount() - 1;
+    ref?.current?.gridInst?.focus(lastRowIndex, 0);
   }
-  ref?.current?.gridInst?.appendRow({ isAppend: true });
-  const lastRowIndex = ref?.current?.gridInst?.getRowCount() - 1;
-  ref?.current?.gridInst?.focus(lastRowIndex, 0);
 };
 
 export const removeRow = (ref) => {
-  const Grid = ref?.current?.gridInst;
-  const coords = Grid.getFocusedCell();
-  if (coords.rowKey !== null) {
-    const selectedRowData = ref.current.gridInst.getRow(coords.rowKey);
-    if (selectedRowData.isAppend) {
-      Grid?.removeRow(coords.rowKey);
-    }
-  } else {
-    const createdRows = Grid?.getModifiedRows().createdRows.length;
-    const rowCount = Grid?.getData()?.length;
-    if (rowCount > 0 && createdRows > 0) {
-      const lastRowKey = Grid.getRowAt(rowCount - 1).rowKey;
-      Grid?.removeRow(lastRowKey);
+  if (ref) {
+    const Grid = ref?.current?.gridInst;
+    const coords = Grid.getFocusedCell();
+    if (coords.rowKey !== null) {
+      const selectedRowData = ref.current.gridInst.getRow(coords.rowKey);
+      if (selectedRowData.isAppend) {
+        Grid?.removeRow(coords.rowKey);
+      }
+    } else {
+      const createdRows = Grid?.getModifiedRows().createdRows.length;
+      const rowCount = Grid?.getData()?.length;
+      if (rowCount > 0 && createdRows > 0) {
+        const lastRowKey = Grid.getRowAt(rowCount - 1).rowKey;
+        Grid?.removeRow(lastRowKey);
+      }
     }
   }
 };

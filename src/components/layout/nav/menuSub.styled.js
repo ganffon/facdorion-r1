@@ -23,7 +23,7 @@ export const MenuSub = styled("div")`
   flex-direction: column;
   gap: 10px;
 
-  background: ${palette.blue[700]};
+  background: ${palette.navy[700]};
 
   padding: 20px;
   border-radius: 20px;
@@ -85,7 +85,7 @@ export const MenuList = styled("div")`
   }
 
   &:hover {
-    background: ${palette.blue[600]};
+    background: ${palette.navy[600]};
     cursor: pointer;
     border-radius: 10px;
   }
