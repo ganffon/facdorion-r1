@@ -1,5 +1,5 @@
 import * as C from "constant/Grid";
-import * as CustomGrid from "./gridFunc";
+import { gridCheckBox, gridButton, multiLine, gridNumComma, gridPassword, SVGFlagRenderer } from "./gridFunc";
 import * as RE from "../../functions/regularExpression/regularExpression";
 import condition from "../../functions/gridColumnCondition/condition";
 
@@ -22,7 +22,7 @@ const id = (name = "", header = "") => {
 const text = (
   name = "",
   header = "",
-  isEditMode = false,
+  isCreate = false,
   hidden = false,
   minWidth = C.WIDTH_SHORT,
   align = "left",
@@ -35,7 +35,7 @@ const text = (
     name: name,
     header: header,
     minWidth: minWidth,
-    editor: isEditMode ? "text" : false,
+    editor: isCreate ? "text" : false,
     align: align,
     hidden: hidden,
     sortable: sortable,
@@ -48,7 +48,7 @@ const text = (
 const rText = (
   name = "",
   header = "",
-  isEditMode = false,
+  isCreate = false,
   hidden = false,
   minWidth = C.WIDTH_SHORT,
   align = "left",
@@ -61,7 +61,7 @@ const rText = (
     name: name,
     header: "* " + header,
     minWidth: minWidth,
-    editor: isEditMode ? "text" : false,
+    editor: isCreate ? "text" : false,
     align: align,
     hidden: hidden,
     sortable: sortable,
@@ -76,7 +76,7 @@ const list = (
   name = "",
   header = "",
   listArray = [],
-  isEditMode = false,
+  isCreate = false,
   minWidth = C.WIDTH_SHORT,
   hidden = false,
   align = "left",
@@ -86,11 +86,11 @@ const list = (
   rowSpan = false
 ) => {
   return {
-    name: isEditMode ? id : name,
+    name: isCreate ? id : name,
     header: header,
     minWidth: minWidth,
-    formatter: isEditMode ? "listItemText" : null,
-    editor: isEditMode
+    formatter: isCreate ? "listItemText" : null,
+    editor: isCreate
       ? {
           type: "select",
           options: {
@@ -112,7 +112,7 @@ const rList = (
   name = "",
   header = "",
   listArray = [],
-  isEditMode = false,
+  isCreate = false,
   minWidth = C.WIDTH_SHORT,
   hidden = false,
   align = "left",
@@ -122,11 +122,11 @@ const rList = (
   rowSpan = false
 ) => {
   return {
-    name: isEditMode ? id : name,
+    name: isCreate ? id : name,
     header: "* " + header,
     minWidth: minWidth,
-    formatter: isEditMode ? "listItemText" : null,
-    editor: isEditMode
+    formatter: isCreate ? "listItemText" : null,
+    editor: isCreate
       ? {
           type: "select",
           options: {
@@ -146,7 +146,7 @@ const rList = (
 const listGbn = (
   name = "",
   header = "",
-  isEditMode = false,
+  isCreate = false,
   minWidth = C.WIDTH_SHORT,
   hidden = false,
   align = "left",
@@ -159,8 +159,8 @@ const listGbn = (
     name: name,
     header: header,
     minWidth: minWidth,
-    formatter: isEditMode ? "listItemText" : null,
-    editor: isEditMode
+    formatter: isCreate ? "listItemText" : null,
+    editor: isCreate
       ? {
           type: "select",
           options: {
@@ -182,7 +182,7 @@ const listGbn = (
 const check = (
   name = "",
   header = "",
-  isEditMode = false,
+  isCreate = false,
   ref = null,
   minWidth = C.WIDTH_SUPER_SHORT,
   hidden = false,
@@ -197,13 +197,14 @@ const check = (
     minWidth: minWidth,
     editor: false,
     renderer: {
-      type: CustomGrid.CheckBox,
+      type: gridCheckBox,
       options: {
         name: name,
-        disabled: isEditMode ? false : true,
+        disabled: isCreate ? false : true,
         gridInstance: ref?.current?.gridInst,
       },
     },
+    className: isCreate ? "tui-grid-cell-editable" : "",
     align: "center",
     hidden: hidden,
     sortable: sortable,
@@ -216,8 +217,8 @@ const button = (
   name = "",
   header = "",
   btnName = "",
-  func = () => {},
   btnName2 = "",
+  func = () => {},
   btnType = "",
   disabled = false
 ) => {
@@ -228,7 +229,7 @@ const button = (
     align: "center",
     editor: false,
     renderer: {
-      type: CustomGrid.Button,
+      type: gridButton,
       options: {
         name: btnName,
         name2: btnName2,
@@ -248,7 +249,7 @@ const button = (
  *
  * @param {*} name
  * @param {*} header
- * @param {*} isEditMode
+ * @param {*} isCreate
  * @param {*} minWidth
  * 실제 입력받는 페이지에서 Grid Edit Finish 에 정규표현식 적용해줘야함
  * if (Condition(e, ["columnName"])) {
@@ -259,7 +260,7 @@ const button = (
 const number = (
   name = "",
   header = "",
-  isEditMode = false,
+  isCreate = false,
   minWidth = C.WIDTH_SHORT,
   hidden = false,
   sortable = false,
@@ -271,9 +272,9 @@ const number = (
     header: header,
     minWidth: minWidth,
     align: "right",
-    editor: isEditMode ? "text" : false,
+    editor: isCreate ? "text" : false,
     formatter: function (value) {
-      return CustomGrid.NumComma(value);
+      return gridNumComma(value.value);
     },
     hidden: hidden,
     sortable: sortable,
@@ -286,7 +287,7 @@ const number = (
 const rNumber = (
   name = "",
   header = "",
-  isEditMode = false,
+  isCreate = false,
   minWidth = C.WIDTH_SHORT,
   hidden = false,
   sortable = false,
@@ -298,9 +299,9 @@ const rNumber = (
     header: "* " + header,
     minWidth: minWidth,
     align: "right",
-    editor: isEditMode ? "text" : false,
+    editor: isCreate ? "text" : false,
     formatter: function (value) {
-      return CustomGrid.NumComma(value);
+      return gridNumComma(value.value);
     },
     hidden: hidden,
     sortable: sortable,
@@ -310,14 +311,14 @@ const rNumber = (
   };
 };
 
-const select = (name = "", header = "", isEditMode = false, minWidth = C.WIDTH_SHORT, align = "left") => {
+const select = (name = "", header = "", isCreate = false, minWidth = C.WIDTH_SHORT, align = "left") => {
   return {
     name: name,
     header: header,
     minWidth: minWidth,
     align: align,
     editor: false,
-    validation: isEditMode
+    validation: isCreate
       ? {
           required: true,
         }
@@ -330,14 +331,14 @@ const select = (name = "", header = "", isEditMode = false, minWidth = C.WIDTH_S
   };
 };
 
-const rSelect = (name = "", header = "", isEditMode = false, minWidth = C.WIDTH_SHORT, align = "left") => {
+const rSelect = (name = "", header = "", isCreate = false, minWidth = C.WIDTH_SHORT, align = "left") => {
   return {
     name: name,
     header: "* " + header,
     minWidth: minWidth,
     align: align,
     editor: false,
-    validation: isEditMode
+    validation: isCreate
       ? {
           required: true,
         }
@@ -350,13 +351,13 @@ const rSelect = (name = "", header = "", isEditMode = false, minWidth = C.WIDTH_
   };
 };
 
-const date = (name = "", header = "", isEditMode = false, minWidth = C.WIDTH_SHORT, sortable = false) => {
+const date = (name = "", header = "", isCreate = false, minWidth = C.WIDTH_SHORT, sortable = false) => {
   return {
     name: name,
     header: header,
     minWidth: minWidth,
     align: "center",
-    editor: isEditMode
+    editor: isCreate
       ? {
           type: "datePicker",
           options: {
@@ -373,13 +374,13 @@ const date = (name = "", header = "", isEditMode = false, minWidth = C.WIDTH_SHO
   };
 };
 
-const rDate = (name = "", header = "", isEditMode = false, minWidth = C.WIDTH_SHORT, sortable = false) => {
+const rDate = (name = "", header = "", isCreate = false, minWidth = C.WIDTH_SHORT, sortable = false) => {
   return {
     name: name,
     header: "* " + header,
     minWidth: minWidth,
     align: "center",
-    editor: isEditMode
+    editor: isCreate
       ? {
           type: "datePicker",
           options: {
@@ -396,15 +397,88 @@ const rDate = (name = "", header = "", isEditMode = false, minWidth = C.WIDTH_SH
   };
 };
 
-const password = (name = "", header = "", isEditMode = false, hidden = false) => {
+const month = (name = "", header = "", isCreate = false, minWidth = C.WIDTH_SHORT, sortable = false) => {
+  return {
+    name: name,
+    header: header,
+    minWidth: minWidth,
+    align: "center",
+    editor: isCreate
+      ? {
+          type: "datePicker",
+          options: {
+            language: "ko",
+            format: "yyyy-MM",
+            type: "month",
+          },
+        }
+      : false,
+    hidden: false,
+    sortable: sortable,
+    filter: false,
+    whiteSpace: false,
+    rowSpan: false,
+  };
+};
+const year = (name = "", header = "", isCreate = false, minWidth = C.WIDTH_SHORT, sortable = false) => {
+  return {
+    name: name,
+    header: header,
+    minWidth: minWidth,
+    align: "center",
+    editor: isCreate
+      ? {
+          type: "datePicker",
+          options: {
+            language: "ko",
+            format: "yyyy",
+            type: "year",
+          },
+        }
+      : false,
+    hidden: false,
+    sortable: sortable,
+    filter: false,
+    whiteSpace: false,
+    rowSpan: false,
+  };
+};
+
+const time = (
+  name = "",
+  header = "",
+  isCreate = false,
+  hidden = false,
+  minWidth = C.WIDTH_SUPER_SHORT,
+  align = "center",
+  sortable = false,
+  filter = false,
+  whiteSpace = false,
+  rowSpan = false
+) => {
+  return {
+    name: name,
+    header: header,
+    minWidth: minWidth,
+    editor: isCreate ? "text" : false,
+    align: align,
+    hidden: hidden,
+    sortable: sortable,
+    filter: filter ? "select" : false,
+    whiteSpace: whiteSpace,
+    rowSpan: rowSpan,
+  };
+};
+
+const password = (name = "", header = "", isCreate = false, hidden = false) => {
   return {
     name: name,
     header: header,
     minWidth: C.WIDTH_MIDDLE,
     align: "left",
-    editor: isEditMode ? "password" : false,
+    editor: isCreate ? "password" : false,
     formatter: function (value) {
-      return CustomGrid.Password(value, true);
+      return gridPassword(value, true);
     },
     hidden: hidden,
     sortable: false,
@@ -414,15 +488,15 @@ const password = (name = "", header = "", isEditMode = false, hidden = false) =>
   };
 };
 
-const rPassword = (name = "", header = "", isEditMode = false) => {
+const rPassword = (name = "", header = "", isCreate = false) => {
   return {
     name: name,
     header: "* " + header,
     minWidth: C.WIDTH_MIDDLE,
     align: "left",
-    editor: isEditMode ? "password" : false,
+    editor: isCreate ? "password" : false,
     formatter: function (value) {
-      return CustomGrid.Password(value, true);
+      return gridPassword(value, true);
     },
     hidden: false,
     sortable: false,
@@ -436,7 +510,7 @@ const multi = (names = []) => {
   const columns = names.map((name) => {
     return {
       name: name,
-      renderer: CustomGrid.ColumnHeaderMultiLine,
+      renderer: multiLine,
     };
   });
 
@@ -451,7 +525,7 @@ const RENumComma = (e, refGrid, columnName) => {
   }
 };
 
-export {
+export const col = {
   id,
   text,
   rText,
@@ -466,6 +540,9 @@ export {
   rSelect,
   date,
   rDate,
+  month,
+  year,
+  time,
   password,
   rPassword,
   multi,

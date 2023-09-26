@@ -4,7 +4,7 @@ import FdrInput from "components/input/fdrInput";
 import FdrDate from "components/date/fdrDate";
 import FdrCombo from "components/combo/fdrCombo";
 import getDt from "functions/getDateTime/getDateTime";
-import { convertValueText, reverseValueText } from "functions/convertObj/objValueText";
+import { convertValueText, reverseValueText } from "functions/convertObj/cboList/objValueText";
 import { restGet } from "api/rest";
 import { useLine } from "functions/getCboList/getCboList";
 

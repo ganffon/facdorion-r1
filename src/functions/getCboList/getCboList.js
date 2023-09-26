@@ -1,6 +1,6 @@
-import { restGet } from "api/rest";
+import { rest } from "api/rest";
 import { URI_MDM } from "api/uri";
-import { convertValueText } from "functions/convertObj/objValueText";
+import { convertValueText } from "functions/convertObj/cboList/objValueText";
 import { useState, useEffect } from "react";
 
 const cboSort = (obj) => {
@@ -22,7 +22,7 @@ export const useLine = () => {
   const [lineList, setLineList] = useState([]);
   useEffect(() => {
     const getCboOpt = async () => {
-      const result = await restGet(URI_MDM.LINE);
+      const result = await rest.get(URI_MDM.LINE.GET.LINE);
       if (result.flag) {
         const convert = convertValueText(result.res, "line_id", "line_nm");
         const sort = cboSort(convert);

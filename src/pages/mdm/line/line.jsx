@@ -4,26 +4,28 @@ import FdrInput from "components/input/fdrInput";
 import FdrDate from "components/date/fdrDate";
 import FdrCombo from "components/combo/fdrCombo";
 import getDt from "functions/getDateTime/getDateTime";
-import { convertValueText, reverseValueText } from "functions/convertObj/objValueText";
-import { restGet } from "api/rest";
+import { convertValueText, reverseValueText } from "functions/convertObj/cboList/objValueText";
+import { rest } from "api/rest";
 import { useLine } from "functions/getCboList/getCboList";
 import Contents from "components/layout/frame/contents";
 import FdrButton from "components/button/fdrButton";
 import { LayoutContext } from "components/layout/layout";
 import FdrGrid from "components/grid/fdrGrid";
 import LineSet from "./line.set";
-import { oneAddRow, addRow, removeRow } from "components/grid/gridFunc";
 import FdrRadio from "components/radio/fdrRadio";
 import FdrCheckBox from "components/checkBox/fdrCheckBox";
+import { SCM_MDM, URI_MDM } from "api/uri";
+import { gridCreate, gridModify } from "functions/convertObj/grid/transferParams";
+import FdrButtonGroup from "components/button/fdrButtonGroup";
 
 export function Line(props) {
   const { backDrop, snackBar } = useContext(LayoutContext);
-  const [isEditMode, setIsEditMode] = useState(false);
   const [gridData, setGridData] = useState(null);
   const refGrid = useRef(null);
   const [lineList] = useLine();
+  const [isCreate, setIsCreate] = useState(false);
   const { rowHeaders, rowHeadersModal, header, columns, columnsModal, columnOptions, inputSet } = LineSet(
-    isEditMode,
+    isCreate,
     refGrid
   );
   const filterReducer = (filter, action) => {
@@ -51,9 +53,8 @@ export function Line(props) {
       prod_nm: filter.bInput,
       model_nm: filter.aCombo?.key,
     };
-    const result = await restGet("/std/line", params);
+    // const result = await rest.get("/std/line", params);
   };
-  useEffect(() => {}, []);
 
   const origin = [
     { line_id: "id1", line_nm: "line1" },
@@ -90,7 +91,7 @@ export function Line(props) {
 
     try {
       backDrop.set(true);
-      const data = await restGet("/std/line", params);
+      const data = await rest.get(URI_MDM.LINE.GET.INCLUDE_REWORK, params);
       setGridData(data.res);
     } catch (err) {
       alert(err);
@@ -99,17 +100,25 @@ export function Line(props) {
     }
   };
 
-  const onAddRow = () => {
-    addRow(refGrid);
-    // oneAddRow(refGrid);
+  const onModify = () => {
+    gridModify(
+      backDrop,
+      snackBar,
+      refGrid,
+      SCM_MDM.LINE.PUT,
+      URI_MDM.LINE.PUT.LINE,
+      SCM_MDM.LINE.DELETE,
+      URI_MDM.LINE.DELETE.LINE,
+      onSearch
+    );
   };
-  const onCancelRow = () => {
-    removeRow(refGrid);
+  const onCreate = () => {
+    gridCreate(backDrop, snackBar, refGrid, SCM_MDM.LINE.POST, URI_MDM.LINE.POST.LINE, setIsCreate);
   };
-  const onSave = () => {
-    // const edit = refGrid?.current?.gridInst?.getModifiedRows();
-    // alert(`신규 : ${edit.createdRows.length} 건 / 수정 : ${edit.updatedRows.length} 건`);
-  };
+
+  useEffect(() => {
+    onSearch();
+  }, [isCreate]);
 
   return (
     <Contents>
@@ -133,17 +142,18 @@ export function Line(props) {
           dispatch={filterDispatch}
         />
         <FdrButton id={"search"} onClick={onSearch} fill={true} />
-        {/* <FdrButton id={"addRow"} />
-        <FdrButton id={"cancelRow"} type={"success"} onClick={onCancelRow} />
-        <FdrButton id={"delete"} type={"success"} />
-        <FdrButton
+        {/* <FdrButton id={"addRow"} /> */}
+
+        {/* <FdrButton id={"save"} onClick={onSave} />
+        <FdrButton id={"delete"} type={"success"} onClick={onDelete} /> */}
+        {/* <FdrButton
           id={"edit"}
           type={"warning"}
           onClick={() => {
-            setIsEditMode(true);
+            setIsReport(true);
           }}
-        />
-        <FdrButton id={"new"} type={"warning"} />
+        /> */}
+        {/* <FdrButton id={"new"} type={"warning"} />
         <FdrButton id={"save"} type={"error"} />
         <FdrButton id={"mapping"} type={"error"} /> */}
         {/* <FdrButton id={"vector"} type={"success"} />
@@ -156,9 +166,15 @@ export function Line(props) {
         <FdrButton id={"reset"} type={"warning"}  /> */}
       </S.Header>
       <S.Main>
-        <FdrButton id={"addRow"} onClick={onAddRow} />
-        <FdrButton id={"save"} onClick={onSave} />
+        <FdrButtonGroup
+          isCreate={isCreate}
+          setIsCreate={setIsCreate}
+          ref={refGrid}
+          onCreate={onCreate}
+          onModify={onModify}
+        />
         <FdrGrid
+          minusHeight={"60px"}
           columnOptions={columnOptions}
           columns={columns}
           rowHeaders={"2"}
@@ -166,7 +182,7 @@ export function Line(props) {
           data={gridData}
           draggable={false}
           ref={refGrid}
-          isReport={true}
+          isReport={false}
         />
       </S.Main>
     </Contents>
