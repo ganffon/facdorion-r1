@@ -31,4 +31,45 @@ const restGet = async (uri, params = "") => {
   }
 };
 
-export { getParams, restGet };
+const restPost = async (uri, data = []) => {
+  if (data.length > 0) {
+    try {
+      const result = await restAPI.post(uri, data);
+      return { flag: result?.data?.result, res: result?.data?.data?.rows };
+    } catch (err) {
+      console.log(err);
+      return { flag: err?.response?.data?.result, res: errCode(err?.response?.data?.result_code) };
+    }
+  }
+};
+const restPut = async (uri, data = []) => {
+  if (data.length > 0) {
+    try {
+      const result = await restAPI.put(uri, data);
+      return { flag: result?.data?.result, res: result?.data?.data?.rows };
+    } catch (err) {
+      console.log(err);
+      return { flag: err?.response?.data?.result, res: errCode(err?.response?.data?.result_code) };
+    }
+  }
+};
+
+const restDelete = async (uri, data = []) => {
+  if (data.length > 0) {
+    try {
+      const result = await restAPI.delete(uri, { data });
+      return { flag: result?.data?.result, res: result?.data?.data?.rows };
+    } catch (err) {
+      console.log(err);
+      return { flag: err?.response?.data?.result, res: errCode(err?.response?.data?.result_code) };
+    }
+  }
+};
+
+export const rest = {
+  get: restGet,
+  post: restPost,
+  put: restPut,
+  delete: restDelete,
+  // patch: restPatch,
+};

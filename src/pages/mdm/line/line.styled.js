@@ -25,8 +25,3 @@ export const Main = styled("main")`
   align-items: end;
   gap: 10px;
 `;
-
-export const Btn = styled("button")`
-  width: 100px;
-  height: 50px;
-`;

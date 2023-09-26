@@ -1,33 +1,23 @@
 import CN from "json/ColumnName.json";
 import "components/grid/gridStyle.css";
 import * as C from "constant/Grid.js";
-import * as col from "components/grid/gridColumn";
+import { col } from "components/grid/gridColumnSetting";
 
-function LineSet(isEditMode, ref) {
-  const data = [];
-  const rowHeaders = ["checkbox", "rowNum"];
-  const rowHeadersModal = ["rowNum"];
-  /** 🔸columns ❗
-   * editor: false||"text"
-   * whiteSpace: "nowrap"||"normal"||"pre"||"pre-wrap"||"pre-line"
-   * sortable: true||false
-   * require: true||false
-   * rowSpan: true||false
-   * hidden: true||false
-   * align: "left"||"center"||"right"
-   * filter: false||"select"||{type:"text",operator:"OR"}
-   */
+function LineSet(isCreate, ref) {
   const columns = [
-    col.id("factory_id", CN.factory_id),
-    col.id("line_id", CN.line_id),
-    col.text("line_cd", CN.line_cd, C.U, C.U, C.WIDTH_MIDDLE),
-    col.text("line_nm", CN.line_nm, isEditMode, C.U, C.WIDTH_MIDDLE),
+    col.text("line_cd", CN.line_cd, isCreate, C.U, C.WIDTH_MIDDLE),
+    col.text("line_nm", CN.line_nm, true, C.U, C.WIDTH_MIDDLE),
+    // col.number("line_num", "line_num", isCreate),
+    // col.date("line_date", "line_date", isCreate),
+    // col.time("line_time", "line_time", isCreate),
     // col.button("button", "버튼", "On", onButton),
-    col.check("rework_fg", CN.rework_fg, isEditMode, ref),
+    col.check("rework_fg", CN.rework_fg, true, ref),
     col.text("create_at", CN.create_at, C.U, C.U, C.WIDTH_LONG, "center"),
     col.text("create_user_nm", CN.create_user_nm, C.U, C.U, C.U, "center"),
     col.text("update_at", CN.update_at, C.U, C.U, C.WIDTH_LONG, "center"),
     col.text("update_user_nm", CN.update_user_nm, C.U, C.U, C.U, "center"),
+    col.id("factory_id"),
+    col.id("line_id"),
   ];
   const columnsModal = [
     col.text("line_cd", CN.line_cd, true),
@@ -40,26 +30,26 @@ function LineSet(isEditMode, ref) {
     frozenBorderWidth: 3,
     frozenCount: 0, // 🔸frozenColumn은 여기 값만 수정
   };
-
-  const header = {
-    //🔸headerMerge
-    // height: 100,
-    // complexColumns: [
-    //   {
-    //     header: "test",
-    //     name: "test_test",
-    //     childNames: ["line_cd", "line_nm"],
-    //     renderer: CustomGrid.ColumnHeaderMultiLine,
-    //   },
-    // ],
-    //🔸multiLine
-    // columns: [
-    //   {
-    //     name: "line_cd",
-    //     renderer: CustomGrid.ColumnHeaderMultiLine,
-    //   },
-    // ],
-  };
+  const header = col.multi(["rework_fg"]);
+  // const header = {
+  //🔸headerMerge
+  // height: 100,
+  // complexColumns: [
+  //   {
+  //     header: "test",
+  //     name: "test_test",
+  //     childNames: ["line_cd", "line_nm"],
+  //     renderer: CustomGrid.multiLine,
+  //   },
+  // ],
+  //🔸multiLine
+  // columns: [
+  //   {
+  //     name: "line_cd",
+  //     renderer: CustomGrid.multiLine,
+  //   },
+  // ],
+  // };
   // const header = {
   //   height: "60",
   //   complexColumns: [
@@ -71,37 +61,11 @@ function LineSet(isEditMode, ref) {
   //   ],
   // };
 
-  /**
-   * 🔸날짜단일조회 - "single"
-   * 🔸날짜기간조회 - "range"
-   * 🔸날짜안씀 - null
-   */
-  const datePickerSet = null;
-
-  /**
-   * 🔸inputSet id 값이 ⭐ BE : query params
-   */
-  const inputSet = [
-    {
-      id: "line_cd",
-      name: CN.line_cd,
-    },
-    {
-      id: "line_nm",
-      name: CN.line_nm,
-    },
-  ];
-
   return {
-    data,
-    rowHeaders,
-    rowHeadersModal,
     columns,
     columnsModal,
     columnOptions,
     header,
-    datePickerSet,
-    inputSet,
   };
 }
 

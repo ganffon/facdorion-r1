@@ -1,8 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-// ⬇️ import MUI
-import Button from "@mui/material/Button";
-// ⬇️ reference of page
 import doriNotFound from "img/notFound/doriNotFound.svg";
 import Text404 from "img/notFound/404.svg";
 import * as S from "./notFound.styled";

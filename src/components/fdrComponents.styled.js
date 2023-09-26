@@ -147,8 +147,8 @@ export const snackBarIcon = styled("img")``;
 
 export const FdrGrid = styled("div")`
   width: 100%;
-  height: 100%;
-  padding: 15px;
+  height: calc(100% - ${($props) => $props.$minusHeight});
+  padding: 0px 15px 15px 15px;
 
   & .selectedBack {
     background-color: ${palette.skyBlue[100]};
@@ -223,4 +223,13 @@ export const CheckBoxLabel = styled("div")`
 export const CheckBoxText = styled("label")`
   cursor: pointer;
   margin-right: 5px;
+`;
+export const FdrButtonGroup = styled("div")`
+  width: 100%;
+  height: ${($props) => $props.$height};
+  padding: 15px 15px 0px 15px;
+  display: flex;
+  justify-content: end;
+  align-items: flex-end;
+  gap: 10px;
 `;

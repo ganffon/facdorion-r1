@@ -1,4 +1,4 @@
-.checkbox {
+.gridCheckbox {
   cursor: pointer;
   transform: scale(2);
   /* display: table; */
@@ -6,7 +6,10 @@
   /* left: 43%; */
   accent-color: #f5329498;
 }
-.customButton {
+.gridFlag {
+  background: #e5e5e5 !important;
+}
+.gridButton {
   width: 80%;
   height: 25px;
   font-family: "NotoSansKR";
@@ -26,7 +29,7 @@
   width: 95%;
 }
 
-.columnHeaderMultiLine {
+.headerMultiLine {
   white-space: pre;
 }
 .tui-grid-container {

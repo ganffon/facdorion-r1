@@ -4,10 +4,13 @@ import Grid from "@toast-ui/react-grid";
 import gridTheme from "./gridTheme.js";
 import "tui-grid/dist/tui-grid.css";
 import { LayoutContext } from "components/layout/layout";
+import "tui-date-picker/dist/tui-date-picker.css";
+import { rowHeaderCustom } from "./gridFunc";
 
 const FdrGrid = forwardRef((props, ref) => {
   const { menuSlide } = useContext(LayoutContext);
   const {
+    minusHeight = "0px",
     columnOptions = [],
     columns = [],
     rowHeaders = "2",
@@ -17,7 +20,7 @@ const FdrGrid = forwardRef((props, ref) => {
     onClick = () => {},
     onDblClick = () => {},
     onEditingFinish = () => {},
-    isReport = false,
+    isReport = {},
   } = props;
 
   useEffect(() => {
@@ -56,33 +59,37 @@ const FdrGrid = forwardRef((props, ref) => {
     }
   }, [menuSlide.state]);
 
-  return (
-    <S.FdrGrid>
-      <Grid
-        scrollX={true}
-        scrollY={true}
-        rowHeaders={rowHeaders === "2" ? ["checkbox", "rowNum"] : ["rowNum"]} // index 컬럼 생성 "rowNum", "checkbox", "radio"
-        rowHeight={"auto"} // index 컬럼 자동 높이 조절
-        bodyHeight={"fitToParent"}
-        heightResizable={false}
-        columnOptions={columnOptions}
-        columns={columns}
-        data={data}
-        header={header}
-        draggable={draggable}
-        ref={ref || null}
-        onClick={(e) => {
-          onClick(e);
-          handleFocus();
-          selectedRow(e);
-        }}
-        onDblclick={onDblClick}
-        onEditingFinish={(e) => {
-          onEditingFinish(e);
-        }}
-      />
-    </S.FdrGrid>
-  );
+  const FdrGrid = useMemo(() => {
+    return (
+      <S.FdrGrid $minusHeight={minusHeight}>
+        <Grid
+          scrollX={true}
+          scrollY={true}
+          rowHeaders={rowHeaders === "2" ? ["checkbox", "rowNum"] : ["rowNum"]} // index 컬럼 생성 "rowNum", "checkbox", "radio"
+          rowHeight={"auto"} // index 컬럼 자동 높이 조절
+          bodyHeight={"fitToParent"}
+          heightResizable={false}
+          columnOptions={columnOptions}
+          columns={columns}
+          data={data}
+          header={header}
+          draggable={draggable}
+          ref={ref || null}
+          onClick={(e) => {
+            onClick(e);
+            handleFocus();
+            selectedRow(e);
+          }}
+          onDblclick={onDblClick}
+          onEditingFinish={(e) => {
+            onEditingFinish(e);
+          }}
+        />
+      </S.FdrGrid>
+    );
+  }, [data, columns, columnOptions]);
+
+  return FdrGrid;
 });
 
 export default FdrGrid;
