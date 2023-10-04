@@ -26,3 +26,14 @@ const SCM = {
 };
 
 export const SCM_MDM = SCM.MDM;
+
+export const CN = {
+  create_at: "등록일시",
+  create_user_nm: "등록자",
+  update_at: "수정일시",
+  update_user_nm: "수정자",
+
+  line_cd: "라인코드",
+  line_nm: "라인명",
+  rework_fg: "재작업라인\n여부",
+};

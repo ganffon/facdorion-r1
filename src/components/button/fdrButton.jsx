@@ -24,7 +24,6 @@ function FdrButton(props) {
     height = "40px",
     width = "",
     disabled = false,
-    value = null,
     className = "",
     id = "",
     fill = false,

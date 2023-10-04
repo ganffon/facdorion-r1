@@ -1,4 +1,3 @@
-import editFlag from "img/grid/editFlag.svg";
 export class gridCheckBox {
   constructor(props) {
     const el = document.createElement("input");
@@ -221,21 +220,7 @@ export function gridNumComma(value) {
     return null;
   }
 }
-/**
- *
- * @param {any} value 다른 문자는 숨기고 숫자만 보여줌
- * @returns
- */
-export function onlyNum(value) {
-  if (value.value !== null) {
-    return value.value
-      .toString()
-      .replace(/[^0-9.]/g, "")
-      .replace(/(\..*)\./g, "$1");
-  } else {
-    return null;
-  }
-}
+
 /**
  *
  * @param {any} value yyyy-MM-dd 형식 표현
@@ -361,15 +346,20 @@ export const cancelRow = (ref, setGridData, btnRowKey = null) => {
     }
   }
 };
+/**
+ * 일반적인 상황에서의 [행 추가] 버튼
+ */
 export const addRow = (ref) => {
   if (ref) {
     const grid = ref?.current?.gridInst;
     grid?.appendRow({ rowState: "add" });
-    const lastRowIndex = grid?.getRowCount() - 1;
-    grid?.focus(lastRowIndex, 0);
+    const rowKey = grid?.getRowCount() - 1;
+    grid?.focus(rowKey, 0);
   }
 };
-
+/**
+ * Header Grid에서의 [행 추가] 버튼 단, 1회만 동작!
+ */
 export const oneAddRow = (ref) => {
   if (ref) {
     const grid = ref?.current?.gridInst;
@@ -379,12 +369,13 @@ export const oneAddRow = (ref) => {
       return;
     }
     grid?.appendRow({ rowState: "add" });
-    const lastRowIndex = grid?.getRowCount() - 1;
-
-    grid?.focus(lastRowIndex, 0);
+    const rowKey = grid?.getRowCount() - 1;
+    grid?.focus(rowKey, 0);
   }
 };
-
+/**
+ * [행 취소] 버튼
+ */
 export const removeRow = (ref) => {
   if (ref) {
     const grid = ref?.current?.gridInst;
@@ -437,3 +428,68 @@ export class SVGFlagRenderer {
     }
   }
 }
+/**
+ * 컬럼명 중 필수값 컬럼명 앞에 * 표시를 하기 위함
+ */
+export const req = (columnName) => {
+  const requireName = "*" + columnName;
+  return requireName;
+};
+
+// export class CheckboxRenderer {
+//   constructor(props) {
+//     const { grid, rowKey } = props;
+
+//     // 레이블 생성
+//     const label = document.createElement("div");
+//     label.className = "rowHeaderCheckBoxWrap";
+//     label.setAttribute("for", String(rowKey));
+
+//     // 이미지 요소 추가
+//     const imageElement = document.createElement("img");
+//     imageElement.className = "rowHeaderImg";
+//     imageElement.src = DeleteIcon; // 이미지 경로 설정
+//     label.appendChild(imageElement);
+
+//     // 체크박스 요소 추가
+//     const checkboxInput = document.createElement("input");
+//     checkboxInput.type = "checkbox";
+//     checkboxInput.id = String(rowKey);
+//     checkboxInput.className = "rowHeaderCheckBox";
+//     label.appendChild(checkboxInput);
+
+//     checkboxInput.addEventListener("click", (ev) => {
+//       if (ev.shiftKey && CheckboxRenderer.lastChecked !== null) {
+//         const start = Math.min(rowKey, CheckboxRenderer.lastChecked);
+//         const end = Math.max(rowKey, CheckboxRenderer.lastChecked);
+//         const targetState = ev.target.checked;
+
+//         for (let i = start; i <= end; i++) {
+//           grid[targetState ? "check" : "uncheck"](i);
+//         }
+
+//         ev.stopPropagation(); // 이 이벤트의 추가적인 전파를 막습니다.
+//       }
+
+//       CheckboxRenderer.lastChecked = rowKey;
+//     });
+
+//     // change 이벤트 리스너에서는 shiftKey 관련 처리를 제거
+//     checkboxInput.addEventListener("change", (ev) => {
+//       ev.stopPropagation();
+//       grid[checkboxInput.checked ? "check" : "uncheck"](rowKey);
+//     });
+
+//     this.el = label;
+//     this.render(props);
+//   }
+
+//   getElement() {
+//     return this.el;
+//   }
+
+//   render(props) {
+//     const checkboxInput = this.el.querySelector("input[type='checkbox']");
+//     checkboxInput.checked = Boolean(props.value);
+//   }
+// }

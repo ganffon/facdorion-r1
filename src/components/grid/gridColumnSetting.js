@@ -1,7 +1,7 @@
-import * as C from "constant/Grid";
-import { gridCheckBox, gridButton, multiLine, gridNumComma, gridPassword, SVGFlagRenderer } from "./gridFunc";
+import { gridCheckBox, gridButton, multiLine, gridNumComma, gridPassword, onlyNumGrid } from "./gridFunc";
 import * as RE from "../../functions/regularExpression/regularExpression";
 import condition from "../../functions/gridColumnCondition/condition";
+import { WIDTH } from "constant/grid";
 
 const hidden = process.env.REACT_APP_COLUMN_HIDDEN === "true" ? true : false;
 
@@ -9,7 +9,8 @@ const id = (name = "", header = "") => {
   return {
     name: name,
     header: header,
-    minWidth: C.WIDTH_SHORT,
+    minWidth: WIDTH.SS,
+    width: WIDTH.SS,
     editor: false,
     align: "left",
     hidden: hidden,
@@ -23,9 +24,58 @@ const text = (
   name = "",
   header = "",
   isCreate = false,
+  width = WIDTH.S,
+  sortable = false,
+  filter = false,
+  rowSpan = false,
+  whiteSpace = false,
+  hidden = false
+) => {
+  return {
+    name: name,
+    header: header,
+    minWidth: width,
+    width: width,
+    editor: isCreate ? "text" : false,
+    align: "left",
+    hidden: hidden,
+    sortable: sortable,
+    filter: filter ? "select" : false,
+    whiteSpace: whiteSpace,
+    rowSpan: rowSpan,
+  };
+};
+const textC = (
+  name = "",
+  header = "",
+  isCreate = false,
+  width = WIDTH.S,
+  sortable = false,
+  filter = false,
+  rowSpan = false,
+  whiteSpace = false,
+  hidden = false
+) => {
+  return {
+    name: name,
+    header: header,
+    minWidth: width,
+    width: width,
+    editor: isCreate ? "text" : false,
+    align: "center",
+    hidden: hidden,
+    sortable: sortable,
+    filter: filter ? "select" : false,
+    whiteSpace: whiteSpace,
+    rowSpan: rowSpan,
+  };
+};
+const textR = (
+  name = "",
+  header = "",
+  isCreate = false,
   hidden = false,
-  minWidth = C.WIDTH_SHORT,
-  align = "left",
+  width = WIDTH.S,
   sortable = false,
   filter = false,
   whiteSpace = false,
@@ -34,35 +84,10 @@ const text = (
   return {
     name: name,
     header: header,
-    minWidth: minWidth,
+    minWidth: width,
+    width: width,
     editor: isCreate ? "text" : false,
-    align: align,
-    hidden: hidden,
-    sortable: sortable,
-    filter: filter ? "select" : false,
-    whiteSpace: whiteSpace,
-    rowSpan: rowSpan,
-  };
-};
-
-const rText = (
-  name = "",
-  header = "",
-  isCreate = false,
-  hidden = false,
-  minWidth = C.WIDTH_SHORT,
-  align = "left",
-  sortable = false,
-  filter = false,
-  whiteSpace = false,
-  rowSpan = false
-) => {
-  return {
-    name: name,
-    header: "* " + header,
-    minWidth: minWidth,
-    editor: isCreate ? "text" : false,
-    align: align,
+    align: "right",
     hidden: hidden,
     sortable: sortable,
     filter: filter ? "select" : false,
@@ -77,54 +102,19 @@ const list = (
   header = "",
   listArray = [],
   isCreate = false,
-  minWidth = C.WIDTH_SHORT,
-  hidden = false,
+  width = WIDTH.S,
   align = "left",
   sortable = false,
   filter = false,
+  rowSpan = false,
   whiteSpace = false,
-  rowSpan = false
+  hidden = false
 ) => {
   return {
     name: isCreate ? id : name,
     header: header,
-    minWidth: minWidth,
-    formatter: isCreate ? "listItemText" : null,
-    editor: isCreate
-      ? {
-          type: "select",
-          options: {
-            listItems: listArray,
-          },
-        }
-      : false,
-    align: align,
-    hidden: hidden,
-    sortable: sortable,
-    filter: filter,
-    whiteSpace: whiteSpace,
-    rowSpan: rowSpan,
-  };
-};
-
-const rList = (
-  id = "",
-  name = "",
-  header = "",
-  listArray = [],
-  isCreate = false,
-  minWidth = C.WIDTH_SHORT,
-  hidden = false,
-  align = "left",
-  sortable = false,
-  filter = false,
-  whiteSpace = false,
-  rowSpan = false
-) => {
-  return {
-    name: isCreate ? id : name,
-    header: "* " + header,
-    minWidth: minWidth,
+    minWidth: width,
+    width: width,
     formatter: isCreate ? "listItemText" : null,
     editor: isCreate
       ? {
@@ -147,18 +137,19 @@ const listGbn = (
   name = "",
   header = "",
   isCreate = false,
-  minWidth = C.WIDTH_SHORT,
-  hidden = false,
-  align = "left",
+  width = WIDTH.S,
   sortable = false,
   filter = false,
+  align = "left",
+  rowSpan = false,
   whiteSpace = false,
-  rowSpan = false
+  hidden = false
 ) => {
   return {
     name: name,
     header: header,
-    minWidth: minWidth,
+    minWidth: width,
+    width: width,
     formatter: isCreate ? "listItemText" : null,
     editor: isCreate
       ? {
@@ -184,17 +175,18 @@ const check = (
   header = "",
   isCreate = false,
   ref = null,
-  minWidth = C.WIDTH_SUPER_SHORT,
-  hidden = false,
+  width = WIDTH.SS,
   sortable = false,
   filter = false,
+  rowSpan = false,
   whiteSpace = false,
-  rowSpan = false
+  hidden = false
 ) => {
   return {
     name: name,
     header: header,
-    minWidth: minWidth,
+    minWidth: width,
+    width: width,
     editor: false,
     renderer: {
       type: gridCheckBox,
@@ -225,7 +217,8 @@ const button = (
   return {
     name: name,
     header: header,
-    minWidth: C.WIDTH_SHORT,
+    minWidth: WIDTH.S,
+    width: WIDTH.S,
     align: "center",
     editor: false,
     renderer: {
@@ -261,16 +254,18 @@ const number = (
   name = "",
   header = "",
   isCreate = false,
-  minWidth = C.WIDTH_SHORT,
-  hidden = false,
+  width = WIDTH.S,
   sortable = false,
   filter = false,
-  rowSpan = false
+  rowSpan = false,
+  hidden = false
 ) => {
   return {
+    className: "gridNumber",
     name: name,
     header: header,
-    minWidth: minWidth,
+    minWidth: width,
+    width: width,
     align: "right",
     editor: isCreate ? "text" : false,
     formatter: function (value) {
@@ -283,22 +278,51 @@ const number = (
     rowSpan: rowSpan,
   };
 };
-
-const rNumber = (
+const numberC = (
   name = "",
   header = "",
   isCreate = false,
-  minWidth = C.WIDTH_SHORT,
-  hidden = false,
+  width = WIDTH.S,
   sortable = false,
   filter = false,
-  rowSpan = false
+  rowSpan = false,
+  hidden = false
 ) => {
   return {
+    className: "gridNumber",
     name: name,
-    header: "* " + header,
-    minWidth: minWidth,
-    align: "right",
+    header: header,
+    minWidth: width,
+    width: width,
+    align: "center",
+    editor: isCreate ? "text" : false,
+    formatter: function (value) {
+      return gridNumComma(value.value);
+    },
+    hidden: hidden,
+    sortable: sortable,
+    filter: filter,
+    whiteSpace: false,
+    rowSpan: rowSpan,
+  };
+};
+const numberL = (
+  name = "",
+  header = "",
+  isCreate = false,
+  width = WIDTH.S,
+  sortable = false,
+  filter = false,
+  rowSpan = false,
+  hidden = false
+) => {
+  return {
+    className: "gridNumber",
+    name: name,
+    header: header,
+    minWidth: width,
+    width: width,
+    align: "left",
     editor: isCreate ? "text" : false,
     formatter: function (value) {
       return gridNumComma(value.value);
@@ -311,12 +335,53 @@ const rNumber = (
   };
 };
 
-const select = (name = "", header = "", isCreate = false, minWidth = C.WIDTH_SHORT, align = "left") => {
+const select = (name = "", header = "", isCreate = false, width = WIDTH.S) => {
   return {
     name: name,
     header: header,
-    minWidth: minWidth,
-    align: align,
+    minWidth: width,
+    width: width,
+    align: "left",
+    editor: false,
+    validation: isCreate
+      ? {
+          required: true,
+        }
+      : null,
+    hidden: false,
+    sortable: false,
+    filter: false,
+    whiteSpace: false,
+    rowSpan: false,
+  };
+};
+const selectC = (name = "", header = "", isCreate = false, width = WIDTH.S) => {
+  return {
+    name: name,
+    header: header,
+    minWidth: width,
+    width: width,
+    align: "center",
+    editor: false,
+    validation: isCreate
+      ? {
+          required: true,
+        }
+      : null,
+    hidden: false,
+    sortable: false,
+    filter: false,
+    whiteSpace: false,
+    rowSpan: false,
+  };
+};
+const selectR = (name = "", header = "", isCreate = false, width = WIDTH.S) => {
+  return {
+    name: name,
+    header: header,
+    minWidth: width,
+    width: width,
+    align: "right",
     editor: false,
     validation: isCreate
       ? {
@@ -331,31 +396,12 @@ const select = (name = "", header = "", isCreate = false, minWidth = C.WIDTH_SHO
   };
 };
 
-const rSelect = (name = "", header = "", isCreate = false, minWidth = C.WIDTH_SHORT, align = "left") => {
-  return {
-    name: name,
-    header: "* " + header,
-    minWidth: minWidth,
-    align: align,
-    editor: false,
-    validation: isCreate
-      ? {
-          required: true,
-        }
-      : null,
-    hidden: false,
-    sortable: false,
-    filter: false,
-    whiteSpace: false,
-    rowSpan: false,
-  };
-};
-
-const date = (name = "", header = "", isCreate = false, minWidth = C.WIDTH_SHORT, sortable = false) => {
+const date = (name = "", header = "", isCreate = false, width = WIDTH.S, sortable = false) => {
   return {
     name: name,
     header: header,
-    minWidth: minWidth,
+    minWidth: width,
+    width: width,
     align: "center",
     editor: isCreate
       ? {
@@ -374,34 +420,12 @@ const date = (name = "", header = "", isCreate = false, minWidth = C.WIDTH_SHORT
   };
 };
 
-const rDate = (name = "", header = "", isCreate = false, minWidth = C.WIDTH_SHORT, sortable = false) => {
-  return {
-    name: name,
-    header: "* " + header,
-    minWidth: minWidth,
-    align: "center",
-    editor: isCreate
-      ? {
-          type: "datePicker",
-          options: {
-            language: "ko",
-            format: "yyyy-MM-dd",
-          },
-        }
-      : false,
-    hidden: false,
-    sortable: sortable,
-    filter: false,
-    whiteSpace: false,
-    rowSpan: false,
-  };
-};
-
-const month = (name = "", header = "", isCreate = false, minWidth = C.WIDTH_SHORT, sortable = false) => {
+const month = (name = "", header = "", isCreate = false, width = WIDTH.S, sortable = false) => {
   return {
     name: name,
     header: header,
-    minWidth: minWidth,
+    minWidth: width,
+    width: width,
     align: "center",
     editor: isCreate
       ? {
@@ -420,11 +444,12 @@ const month = (name = "", header = "", isCreate = false, minWidth = C.WIDTH_SHOR
     rowSpan: false,
   };
 };
-const year = (name = "", header = "", isCreate = false, minWidth = C.WIDTH_SHORT, sortable = false) => {
+const year = (name = "", header = "", isCreate = false, width = WIDTH.S, sortable = false) => {
   return {
     name: name,
     header: header,
-    minWidth: minWidth,
+    minWidth: width,
+    width: width,
     align: "center",
     editor: isCreate
       ? {
@@ -449,7 +474,7 @@ const time = (
   header = "",
   isCreate = false,
   hidden = false,
-  minWidth = C.WIDTH_SUPER_SHORT,
+  width = WIDTH.SS,
   align = "center",
   sortable = false,
   filter = false,
@@ -457,9 +482,11 @@ const time = (
   rowSpan = false
 ) => {
   return {
+    className: "gridTime",
     name: name,
     header: header,
-    minWidth: minWidth,
+    minWidth: width,
+    width: width,
     editor: isCreate ? "text" : false,
     align: align,
     hidden: hidden,
@@ -474,31 +501,14 @@ const password = (name = "", header = "", isCreate = false, hidden = false) => {
   return {
     name: name,
     header: header,
-    minWidth: C.WIDTH_MIDDLE,
+    minWidth: WIDTH.M,
+    width: WIDTH.M,
     align: "left",
     editor: isCreate ? "password" : false,
     formatter: function (value) {
       return gridPassword(value, true);
     },
     hidden: hidden,
-    sortable: false,
-    filter: false,
-    whiteSpace: false,
-    rowSpan: false,
-  };
-};
-
-const rPassword = (name = "", header = "", isCreate = false) => {
-  return {
-    name: name,
-    header: "* " + header,
-    minWidth: C.WIDTH_MIDDLE,
-    align: "left",
-    editor: isCreate ? "password" : false,
-    formatter: function (value) {
-      return gridPassword(value, true);
-    },
-    hidden: false,
     sortable: false,
     filter: false,
     whiteSpace: false,
@@ -528,23 +538,23 @@ const RENumComma = (e, refGrid, columnName) => {
 export const col = {
   id,
   text,
-  rText,
+  textC,
+  textR,
   list,
-  rList,
   listGbn,
   check,
   button,
   number,
-  rNumber,
+  numberC,
+  numberL,
   select,
-  rSelect,
+  selectC,
+  selectR,
   date,
-  rDate,
   month,
   year,
   time,
   password,
-  rPassword,
   multi,
   RENumComma,
 };
