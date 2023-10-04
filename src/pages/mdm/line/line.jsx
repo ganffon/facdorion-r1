@@ -17,6 +17,7 @@ import FdrCheckBox from "components/checkBox/fdrCheckBox";
 import { SCM_MDM, URI_MDM } from "api/uri";
 import { gridCreate, gridModify } from "functions/convertObj/grid/transferParams";
 import FdrButtonGroup from "components/button/fdrButtonGroup";
+import condition from "functions/gridColumnCondition/condition";
 
 export function Line(props) {
   const { backDrop, snackBar } = useContext(LayoutContext);
@@ -24,10 +25,8 @@ export function Line(props) {
   const refGrid = useRef(null);
   const [lineList] = useLine();
   const [isCreate, setIsCreate] = useState(false);
-  const { rowHeaders, rowHeadersModal, header, columns, columnsModal, columnOptions, inputSet } = LineSet(
-    isCreate,
-    refGrid
-  );
+  const { header, columns, columnOptions } = LineSet(isCreate, refGrid, lineList);
+
   const filterReducer = (filter, action) => {
     switch (action.type) {
       case "update":
@@ -38,6 +37,7 @@ export function Line(props) {
         return filter;
     }
   };
+
   const [filter, filterDispatch] = useReducer(filterReducer, {
     startDate: getDt(-7).dateFull,
     endDate: getDt.dateFull,
@@ -116,6 +116,12 @@ export function Line(props) {
     gridCreate(backDrop, snackBar, refGrid, SCM_MDM.LINE.POST, URI_MDM.LINE.POST.LINE, setIsCreate);
   };
 
+  const onDblClick = (e) => {
+    if (condition(e, ["select"])) {
+      console.log(e);
+    }
+  };
+
   useEffect(() => {
     onSearch();
   }, [isCreate]);
@@ -183,6 +189,7 @@ export function Line(props) {
           draggable={false}
           ref={refGrid}
           isReport={false}
+          onDblClick={onDblClick}
         />
       </S.Main>
     </Contents>

@@ -9,6 +9,7 @@
 .gridFlag {
   background: #e5e5e5 !important;
 }
+
 .gridButton {
   width: 80%;
   height: 25px;
@@ -32,8 +33,47 @@
 .headerMultiLine {
   white-space: pre;
 }
+
 .tui-grid-container {
   font-family: "NotoSansKR";
+}
+
+.tui-grid-header-area {
+  background: #e5e5e5 !important;
+}
+
+.rowHeaderCheckBoxWrap {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.rowHeaderCheckBox {
+  cursor: pointer;
+  transform: scale(1.2);
+  accent-color: #f5329498;
+}
+
+.rowHeaderImg {
+  width: 20px;
+  height: 20px;
+}
+
+.tui-grid-header-checkbox {
+  cursor: pointer;
+  transform: scale(1.5);
+  accent-color: #f5329498;
+}
+
+th[data-column-name="_checked"].tui-grid-cell-header {
+  background: url("../../img/grid/deleteRowHeader.png") center center no-repeat;
+  background-size: 70% 70%;
+}
+.tui-grid-cell.tui-grid-cell-header.tui-grid-cell-row-header input[name="_checked"] {
+  display: none;
 }
 
 /* .checkbox :disabled {

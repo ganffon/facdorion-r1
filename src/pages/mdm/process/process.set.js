@@ -3,7 +3,7 @@ import restURI from "json/restURI.json";
 import CN from "json/ColumnName.json";
 import * as CustomGrid from "components/grid/setting/CustomGrid";
 import "components/grid/setting/GridStyle.css";
-import * as C from "constant/Grid.js";
+import * as C from "constant/grid.js";
 import * as col from "custom/GridColumnSet";
 
 function ProcessSet(isEditMode) {

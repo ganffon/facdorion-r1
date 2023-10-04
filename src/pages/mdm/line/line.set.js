@@ -1,21 +1,22 @@
-import CN from "json/ColumnName.json";
 import "components/grid/gridStyle.css";
-import * as C from "constant/Grid.js";
 import { col } from "components/grid/gridColumnSetting";
+import { WIDTH } from "constant/grid";
+import { req } from "components/grid/gridFunc";
+import { CN } from "api/uri";
 
-function LineSet(isCreate, ref) {
+function LineSet(isCreate, ref, lineList) {
   const columns = [
-    col.text("line_cd", CN.line_cd, isCreate, C.U, C.WIDTH_MIDDLE),
-    col.text("line_nm", CN.line_nm, true, C.U, C.WIDTH_MIDDLE),
-    // col.number("line_num", "line_num", isCreate),
-    // col.date("line_date", "line_date", isCreate),
-    // col.time("line_time", "line_time", isCreate),
-    // col.button("button", "버튼", "On", onButton),
+    col.text("line_cd", req(CN.line_cd), isCreate, WIDTH.M),
+    col.text("line_nm", CN.line_nm, true, WIDTH.M),
     col.check("rework_fg", CN.rework_fg, true, ref),
-    col.text("create_at", CN.create_at, C.U, C.U, C.WIDTH_LONG, "center"),
-    col.text("create_user_nm", CN.create_user_nm, C.U, C.U, C.U, "center"),
-    col.text("update_at", CN.update_at, C.U, C.U, C.WIDTH_LONG, "center"),
-    col.text("update_user_nm", CN.update_user_nm, C.U, C.U, C.U, "center"),
+    col.number("number", "숫자형", true),
+    col.time("time", "시간형", true),
+    col.list("list_id", "list_nm", "리스트", lineList, true),
+    col.select("select", "셀렉트", true),
+    col.textC("create_at", CN.create_at),
+    col.textC("create_user_nm", CN.create_user_nm),
+    col.textC("update_at", CN.update_at),
+    col.textC("update_user_nm", CN.update_user_nm),
     col.id("factory_id"),
     col.id("line_id"),
   ];
@@ -30,6 +31,7 @@ function LineSet(isCreate, ref) {
     frozenBorderWidth: 3,
     frozenCount: 0, // 🔸frozenColumn은 여기 값만 수정
   };
+  // const header = [];
   const header = col.multi(["rework_fg"]);
   // const header = {
   //🔸headerMerge

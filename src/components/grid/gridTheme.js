@@ -28,7 +28,7 @@ function gridTheme() {
         background: palette.yellow[100],
       },
       disabled: {
-        background: palette.black[100],
+        background: palette.white,
       },
       invalid: {
         background: palette.green[100],

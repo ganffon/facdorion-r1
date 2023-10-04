@@ -1,10 +1,11 @@
-export const WIDTH_SUPER_SHORT = "50";
-export const WIDTH_SHORT = "100";
-export const WIDTH_MIDDLE = "150";
-export const WIDTH_LONG = "200";
-export const WIDTH_SUPER_LONG = "250";
+const SS = 100;
+const S = 150;
+const M = 200;
+const L = 250;
+const SL = 300;
+export const WIDTH = { SS: SS, S: S, M: M, L: L, SL: SL };
 
-export const U = undefined;
+export const XX = undefined;
 
 const HIDDEN_FG = process.env.REACT_APP_COLUMN_HIDDEN;
 export const HIDDEN_ID = HIDDEN_FG === "true" ? true : false;

@@ -5,7 +5,8 @@ import gridTheme from "./gridTheme.js";
 import "tui-grid/dist/tui-grid.css";
 import { LayoutContext } from "components/layout/layout";
 import "tui-date-picker/dist/tui-date-picker.css";
-import { rowHeaderCustom } from "./gridFunc";
+import { onlyNum, onlyTime } from "functions/regularExpression/regularExpression";
+import { tooltipStore } from "components/tooltip/Tooltip";
 
 const FdrGrid = forwardRef((props, ref) => {
   const { menuSlide } = useContext(LayoutContext);
@@ -30,10 +31,10 @@ const FdrGrid = forwardRef((props, ref) => {
   const handleFocus = () => {
     if (!isReport) {
       if (ref) {
-        const Grid = ref?.current?.getInstance();
-        const coords = Grid.getFocusedCell();
+        const grid = ref?.current?.getInstance();
+        const coords = grid.getFocusedCell();
         if (coords) {
-          Grid.startEditing(coords.rowKey, coords.columnName);
+          grid.startEditing(coords.rowKey, coords.columnName);
         }
       }
     }
@@ -42,16 +43,88 @@ const FdrGrid = forwardRef((props, ref) => {
   const beforeSelectedRow = useRef("");
   const selectedRow = (e) => {
     if (ref) {
-      const Grid = ref?.current?.gridInst;
+      const grid = ref?.current?.gridInst;
       if (String(beforeSelectedRow.current)) {
-        Grid?.getColumns().map((col) => Grid?.removeCellClassName(beforeSelectedRow.current, col.name, "selectedBack"));
+        grid?.getColumns().map((col) => grid?.removeCellClassName(beforeSelectedRow.current, col.name, "selectedBack"));
       }
       if (isReport) {
-        Grid?.getColumns().map((col) => Grid?.addCellClassName(e?.rowKey, col.name, "selectedBack"));
+        grid?.getColumns().map((col) => grid?.addCellClassName(e?.rowKey, col.name, "selectedBack"));
         beforeSelectedRow.current = e?.rowKey;
       }
     }
   };
+
+  const checkAll = (e) => {
+    const grid = ref?.current?.gridInst;
+    if (e.columnName === "_checked" && e.rowKey === undefined) {
+      const checked = grid.getCheckedRowKeys().length !== grid.getRowCount();
+      if (checked) {
+        grid.checkAll(checked);
+      } else {
+        grid.uncheckAll(checked);
+      }
+    }
+  };
+
+  const onRegularExpression = (e) => {
+    const grid = ref?.current?.getInstance();
+    const column = grid.getColumn(e.columnName);
+
+    switch (column.className) {
+      case "gridNumber":
+        grid.setValue(e?.rowKey, e?.columnName, onlyNum(e?.value));
+        break;
+      case "gridTime":
+        grid.setValue(e?.rowKey, e?.columnName, onlyTime(e?.value));
+        break;
+      default:
+    }
+  };
+
+  const [tooltip, setTooltip] = useState({ x: 0, y: 0, open: false, contents: "" });
+
+  const checkTooltip = (columnName) => {
+    const tooltipKey = Object.keys(tooltipStore).find((key) => key === columnName);
+    if (tooltipStore[tooltipKey]) {
+      const tooltipContent = tooltipStore[tooltipKey].tooltip;
+      return tooltipContent;
+    } else {
+      return false;
+    }
+  };
+  useEffect(() => {
+    const Grid = ref.current?.gridInst;
+
+    let tooltipTimeout;
+    const handleMouseOver = (e) => {
+      const { targetType, nativeEvent, columnName } = e;
+      const halfWidth = window.innerWidth / 2;
+      if (targetType === "columnHeader") {
+        tooltipTimeout = setTimeout(() => {
+          const tooltipText = checkTooltip(columnName);
+          if (tooltipText) {
+            const xAdj = nativeEvent.layerX > halfWidth ? -300 : 80;
+            setTooltip({
+              ...tooltip,
+              x: nativeEvent.layerX + xAdj,
+              y: nativeEvent.layerY,
+              contents: tooltipText,
+              open: true,
+            });
+          }
+        }, 1000);
+      }
+    };
+    const handleMouseOut = (e) => {
+      clearTimeout(tooltipTimeout);
+      setTooltip({ ...tooltip, contents: "", open: false });
+    };
+
+    if (Grid) {
+      Grid.eventBus.on("mouseover", handleMouseOver);
+      Grid.eventBus.on("mouseout", handleMouseOut);
+    }
+  }, []);
 
   useEffect(() => {
     if (ref) {
@@ -79,15 +152,22 @@ const FdrGrid = forwardRef((props, ref) => {
             onClick(e);
             handleFocus();
             selectedRow(e);
+            checkAll(e);
           }}
           onDblclick={onDblClick}
           onEditingFinish={(e) => {
+            onRegularExpression(e);
             onEditingFinish(e);
           }}
         />
+        {tooltip.open && (
+          <S.Tooltip $x={tooltip.x} $y={30}>
+            <S.TooltipContents>{tooltip.contents}</S.TooltipContents>
+          </S.Tooltip>
+        )}
       </S.FdrGrid>
     );
-  }, [data, columns, columnOptions]);
+  }, [data, columns, columnOptions, tooltip.open]);
 
   return FdrGrid;
 });

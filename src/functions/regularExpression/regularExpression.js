@@ -1,8 +1,6 @@
 const insertAt = (str, sub, pos) => `${str.slice(0, pos)}${sub}${str.slice(pos)}`;
 
-const time = (e, refGrid, columnName) => {
-  const Grid = refGrid?.current?.gridInst;
-  let value = e?.value;
+export const onlyTime = (value) => {
   let pattern01 = /^([1-9]|[01][0-9]|2[0-3]):([0-5][0-9])$/;
   let pattern02 = /^(20|21|22|23|[0-1]\d)[0-5]\d$/;
   if (value === "2400") {
@@ -27,27 +25,44 @@ const time = (e, refGrid, columnName) => {
   if (!pattern01.test(value)) {
     //그럼 숫자 4자리니?
     if (!pattern02.test(value)) {
-      Grid?.setValue(e?.rowKey, columnName, "");
+      return "";
     } else {
-      Grid?.setValue(e?.rowKey, columnName, insertAt(value, ":", 2));
+      return insertAt(value, ":", 2);
     }
   } else {
-    Grid?.setValue(e?.rowKey, columnName, insertAt(value.replace(":", ""), ":", 2));
+    return insertAt(value.replace(":", ""), ":", 2);
   }
 };
 
 //숫자만 입력받는 정규표현식
-const removeNonNumeric = (inputString) => {
+export const removeNonNumeric = (inputString) => {
   if (inputString) {
     const regex = /[^0-9]/g;
     return inputString.replace(regex, "");
   }
 };
-const validateTimeFormat = (inputString) => {
+export const validateTimeFormat = (inputString) => {
   const regex = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/;
   return regex.test(inputString);
 };
-const timeInput = (e) => {
+
+/**
+ *
+ * @param {any} value 다른 문자는 숨기고 숫자만 보여줌
+ * @returns
+ */
+export function onlyNum(value) {
+  if (value && value !== null && value !== undefined) {
+    return value
+      .toString()
+      .replace(/[^0-9.]/g, "")
+      .replace(/(\..*)\./g, "$1");
+  } else {
+    return null;
+  }
+}
+
+export const timeInput = (e) => {
   let pattern01 = /^([1-9]|[01][0-9]|2[0-3]):([0-5][0-9])$/;
   let pattern02 = /^(20|21|22|23|[0-1]\d)[0-5]\d$/;
   if (e === "2400") {
@@ -81,7 +96,7 @@ const timeInput = (e) => {
   }
 };
 
-const numComma = (e, refGrid, columnName) => {
+export const numComma = (e, refGrid, columnName) => {
   const Grid = refGrid?.current?.gridInst;
   const decimalLength = e?.value.toString().includes(".") ? e?.value.toString().split(".")[1].length : 0;
   const int = e?.value.toString().split(".")[0];
@@ -102,14 +117,12 @@ const numComma = (e, refGrid, columnName) => {
   // }
 };
 
-const decimalOnePoint = (value) => {
+export const decimalOnePoint = (value) => {
   const pattern = /^([0-9]+(\.[0-9]?)?)$/;
   return pattern.test(value) ? value : "";
 };
 
-const decimalTwoPoints = (value) => {
+export const decimalTwoPoints = (value) => {
   const pattern = /^[0-9]+(\.[0-9]{0,2})?$/;
   return pattern.test(value) ? value : "";
 };
-
-export { time, timeInput, numComma, removeNonNumeric, validateTimeFormat, decimalOnePoint, decimalTwoPoints };

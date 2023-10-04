@@ -35,7 +35,7 @@ const removeNullRows = (data) => {
   });
 };
 
-const backPost = (ref, params) => {
+const gridPost = (ref, params) => {
   const grid = ref?.current?.gridInst;
   grid.finishEditing();
 
@@ -48,7 +48,7 @@ const backPost = (ref, params) => {
   return convertData;
 };
 
-const backPut = (ref, params) => {
+const gridPut = (ref, params) => {
   const grid = ref?.current?.gridInst;
   grid.finishEditing();
 
@@ -64,7 +64,7 @@ const backPut = (ref, params) => {
   return convertData;
 };
 
-const backDelete = (ref, params) => {
+const gridDelete = (ref, params) => {
   const grid = ref?.current?.gridInst;
   grid.finishEditing();
   let convertData;
@@ -90,7 +90,7 @@ export const gridModify = async (
     backDrop.set(true);
     // 수정 먼저 처리하고 삭제 진행함
     // 수정 실패하면 삭제 진행하지 않음
-    const updated = backPut(ref, SCM_PUT);
+    const updated = gridPut(ref, SCM_PUT);
     if (updated.length > 0) {
       const putResult = await rest.put(URI_PUT, updated);
       if (putResult.flag) {
@@ -101,7 +101,7 @@ export const gridModify = async (
       }
     }
 
-    const deleted = backDelete(ref, SCM_DELETE);
+    const deleted = gridDelete(ref, SCM_DELETE);
     if (deleted?.length > 0) {
       const deleteResult = await rest.delete(URI_DELETE, deleted);
       if (deleteResult.flag) {
@@ -122,7 +122,7 @@ export const gridModify = async (
 export const gridCreate = async (backDrop, snackBar, ref, SCM_POST, URI_POST, setIsCreate = () => {}) => {
   try {
     backDrop.set(true);
-    const created = backPost(ref, SCM_POST);
+    const created = gridPost(ref, SCM_POST);
     if (created.length > 0) {
       const postResult = await rest.post(URI_POST, created);
       if (postResult.flag) {
