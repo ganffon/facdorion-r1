@@ -354,6 +354,8 @@ export const addRow = (ref) => {
     const grid = ref?.current?.gridInst;
     grid?.appendRow({ rowState: "add" });
     const rowKey = grid?.getRowCount() - 1;
+    console.log(grid);
+    grid?.addCellClassName(rowKey, "line_cd", "tui-grid-cell-editable");
     grid?.focus(rowKey, 0);
   }
 };
