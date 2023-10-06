@@ -4,7 +4,7 @@ import { addRow, oneAddRow, removeRow } from "components/grid/gridFunc";
 import * as S from "../fdrComponents.styled";
 
 const FdrButtonGroup = forwardRef((props, ref) => {
-  const { height = "60px", addRowType = "", isCreate, setIsCreate, onCreate = () => {}, onModify = () => {} } = props;
+  const { addRowType = "", isCreate, setIsCreate, onCreate = () => {}, onModify = () => {} } = props;
   const onAddRow = () => {
     if (addRowType === "") {
       addRow(ref);
@@ -17,7 +17,7 @@ const FdrButtonGroup = forwardRef((props, ref) => {
   };
 
   return (
-    <S.FdrButtonGroup $height={height}>
+    <S.FdrButtonGroup>
       {isCreate ? (
         <>
           <FdrButton id={"addRow"} onClick={onAddRow} />
@@ -34,7 +34,6 @@ const FdrButtonGroup = forwardRef((props, ref) => {
       ) : (
         <>
           <FdrButton id={"save"} onClick={onModify} />
-          {/* <FdrButton id={"addRow"} onClick={onAddRow} /> */}
           <FdrButton
             id={"new"}
             fill={true}

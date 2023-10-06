@@ -145,10 +145,31 @@ export const FdrSnackBar = styled("div")`
 `;
 export const snackBarIcon = styled("img")``;
 
+export const FdrGridWrap = styled("div")`
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+  height: 100%;
+  padding: 15px;
+`;
+export const FdrGridHeader = styled("div")`
+  display: flex;
+  justify-content: space-between;
+  ${($props) => $props.$headerHeight && `height: ${$props.$headerHeight};`}
+`;
+
+export const FdrGridTitle = styled("div")`
+  display: flex;
+  align-items: end;
+  font-size: 1.1rem;
+  font-weight: 900;
+  padding-left: 10px;
+`;
+
 export const FdrGrid = styled("div")`
   width: 100%;
   height: calc(100% - ${($props) => $props.$minusHeight});
-  padding: 0px 15px 15px 15px;
   position: relative;
 
   & .selectedBack {
@@ -226,12 +247,10 @@ export const CheckBoxText = styled("label")`
   margin-right: 5px;
 `;
 export const FdrButtonGroup = styled("div")`
-  width: 100%;
-  height: ${($props) => $props.$height};
-  padding: 15px 15px 0px 15px;
+  height: 50px;
   display: flex;
   justify-content: end;
-  align-items: flex-end;
+  align-items: center;
   gap: 10px;
 `;
 export const Tooltip = styled("div")`

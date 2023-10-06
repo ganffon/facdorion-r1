@@ -5,7 +5,7 @@ import { req } from "components/grid/gridFunc";
 import { CN } from "api/uri";
 
 function LineSet(isCreate, ref, lineList) {
-  const columns = [
+  const columnsModify = [
     col.text("line_cd", req(CN.line_cd), isCreate, WIDTH.M),
     col.text("line_nm", CN.line_nm, true, WIDTH.M),
     col.check("rework_fg", CN.rework_fg, true, ref),
@@ -17,6 +17,17 @@ function LineSet(isCreate, ref, lineList) {
     col.textC("create_user_nm", CN.create_user_nm),
     col.textC("update_at", CN.update_at),
     col.textC("update_user_nm", CN.update_user_nm),
+    col.id("factory_id"),
+    col.id("line_id", ["line_cd"]),
+  ];
+  const columnsPost = [
+    col.text("line_cd", req(CN.line_cd), true, WIDTH.M),
+    col.text("line_nm", CN.line_nm, true, WIDTH.M),
+    col.check("rework_fg", CN.rework_fg, true, ref),
+    col.number("number", "숫자형", true),
+    col.time("time", "시간형", true),
+    col.list("list_id", "list_nm", "리스트", lineList, true),
+    col.select("select", "셀렉트", true),
     col.id("factory_id"),
     col.id("line_id"),
   ];
@@ -64,8 +75,8 @@ function LineSet(isCreate, ref, lineList) {
   // };
 
   return {
-    columns,
-    columnsModal,
+    columnsModify,
+    columnsPost,
     columnOptions,
     header,
   };

@@ -11,6 +11,7 @@ import { tooltipStore } from "components/tooltip/Tooltip";
 const FdrGrid = forwardRef((props, ref) => {
   const { menuSlide } = useContext(LayoutContext);
   const {
+    children,
     minusHeight = "0px",
     columnOptions = [],
     columns = [],
@@ -22,6 +23,7 @@ const FdrGrid = forwardRef((props, ref) => {
     onDblClick = () => {},
     onEditingFinish = () => {},
     isReport = {},
+    title = "",
   } = props;
 
   useEffect(() => {
@@ -31,10 +33,10 @@ const FdrGrid = forwardRef((props, ref) => {
   const handleFocus = () => {
     if (!isReport) {
       if (ref) {
-        const grid = ref?.current?.getInstance();
-        const coords = grid.getFocusedCell();
+        const grid = ref?.current?.gridInst;
+        const coords = grid?.getFocusedCell();
         if (coords) {
-          grid.startEditing(coords.rowKey, coords.columnName);
+          grid?.startEditing(coords.rowKey, coords.columnName);
         }
       }
     }
@@ -133,39 +135,56 @@ const FdrGrid = forwardRef((props, ref) => {
   }, [menuSlide.state]);
 
   const FdrGrid = useMemo(() => {
+    let height;
+    if (title && children) {
+      height = "50px";
+    } else if (title && !children) {
+      height = "25px";
+    } else if (!title && !children) {
+      height = "0px";
+    } else {
+      height = "50px";
+    }
     return (
-      <S.FdrGrid $minusHeight={minusHeight}>
-        <Grid
-          scrollX={true}
-          scrollY={true}
-          rowHeaders={rowHeaders === "2" ? ["checkbox", "rowNum"] : ["rowNum"]} // index 컬럼 생성 "rowNum", "checkbox", "radio"
-          rowHeight={"auto"} // index 컬럼 자동 높이 조절
-          bodyHeight={"fitToParent"}
-          heightResizable={false}
-          columnOptions={columnOptions}
-          columns={columns}
-          data={data}
-          header={header}
-          draggable={draggable}
-          ref={ref || null}
-          onClick={(e) => {
-            onClick(e);
-            handleFocus();
-            selectedRow(e);
-            checkAll(e);
-          }}
-          onDblclick={onDblClick}
-          onEditingFinish={(e) => {
-            onRegularExpression(e);
-            onEditingFinish(e);
-          }}
-        />
-        {tooltip.open && (
-          <S.Tooltip $x={tooltip.x} $y={30}>
-            <S.TooltipContents>{tooltip.contents}</S.TooltipContents>
-          </S.Tooltip>
-        )}
-      </S.FdrGrid>
+      <S.FdrGridWrap>
+        <S.FdrGridHeader $headerHeight={height}>
+          {title && <S.FdrGridTitle>{title}</S.FdrGridTitle>}
+          {children && children}
+        </S.FdrGridHeader>
+
+        <S.FdrGrid $minusHeight={height}>
+          <Grid
+            scrollX={true}
+            scrollY={true}
+            rowHeaders={rowHeaders === "2" ? ["checkbox", "rowNum"] : ["rowNum"]} // index 컬럼 생성 "rowNum", "checkbox", "radio"
+            rowHeight={"auto"} // index 컬럼 자동 높이 조절
+            bodyHeight={"fitToParent"}
+            heightResizable={false}
+            columnOptions={columnOptions}
+            columns={columns}
+            data={data}
+            header={header}
+            draggable={draggable}
+            ref={ref || null}
+            onClick={(e) => {
+              onClick(e);
+              handleFocus();
+              selectedRow(e);
+              checkAll(e);
+            }}
+            onDblclick={onDblClick}
+            onEditingFinish={(e) => {
+              onRegularExpression(e);
+              onEditingFinish(e);
+            }}
+          />
+          {tooltip.open && (
+            <S.Tooltip $x={tooltip.x} $y={30}>
+              <S.TooltipContents>{tooltip.contents}</S.TooltipContents>
+            </S.Tooltip>
+          )}
+        </S.FdrGrid>
+      </S.FdrGridWrap>
     );
   }, [data, columns, columnOptions, tooltip.open]);
 

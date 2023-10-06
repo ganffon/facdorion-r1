@@ -18,6 +18,7 @@ import { SCM_MDM, URI_MDM } from "api/uri";
 import { gridCreate, gridModify } from "functions/convertObj/grid/transferParams";
 import FdrButtonGroup from "components/button/fdrButtonGroup";
 import condition from "functions/gridColumnCondition/condition";
+import FdrModal from "components/modal/fdrModal";
 
 export function Line(props) {
   const { backDrop, snackBar } = useContext(LayoutContext);
@@ -25,7 +26,9 @@ export function Line(props) {
   const refGrid = useRef(null);
   const [lineList] = useLine();
   const [isCreate, setIsCreate] = useState(false);
-  const { header, columns, columnOptions } = LineSet(isCreate, refGrid, lineList);
+  const { header, columnsModify, columnsPost, columnOptions } = LineSet(isCreate, refGrid, lineList);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const filterReducer = (filter, action) => {
     switch (action.type) {
@@ -118,7 +121,7 @@ export function Line(props) {
 
   const onDblClick = (e) => {
     if (condition(e, ["select"])) {
-      console.log(e);
+      setIsModalOpen(true);
     }
   };
 
@@ -172,17 +175,9 @@ export function Line(props) {
         <FdrButton id={"reset"} type={"warning"}  /> */}
       </S.Header>
       <S.Main>
-        <FdrButtonGroup
-          isCreate={isCreate}
-          setIsCreate={setIsCreate}
-          ref={refGrid}
-          onCreate={onCreate}
-          onModify={onModify}
-        />
         <FdrGrid
-          minusHeight={"60px"}
           columnOptions={columnOptions}
-          columns={columns}
+          columns={columnsModify}
           rowHeaders={"2"}
           header={header}
           data={gridData}
@@ -190,8 +185,35 @@ export function Line(props) {
           ref={refGrid}
           isReport={false}
           onDblClick={onDblClick}
-        />
+          onClick={onClick}
+          title={"투입물품"}
+        >
+          <FdrButtonGroup
+            isCreate={isCreate}
+            setIsCreate={setIsCreate}
+            ref={refGrid}
+            onCreate={onCreate}
+            onModify={onModify}
+            onSearch={onSearch}
+          />
+        </FdrGrid>
       </S.Main>
+      {isModalOpen && (
+        <FdrModal position={"top"} setIsOpen={setIsModalOpen} title={"Modal Test"}>
+          <FdrGrid
+            columnOptions={columnOptions}
+            columns={columnsPost}
+            rowHeaders={"1"}
+            header={header}
+            data={gridData}
+            draggable={false}
+            ref={refGrid}
+            isReport={true}
+            onDblClick={onDblClick}
+            onClick={onClick}
+          />
+        </FdrModal>
+      )}
     </Contents>
   );
 }

@@ -5,10 +5,10 @@ import { WIDTH } from "constant/grid";
 
 const hidden = process.env.REACT_APP_COLUMN_HIDDEN === "true" ? true : false;
 
-const id = (name = "", header = "") => {
-  return {
+const id = (name = "", key = []) => {
+  const column = {
     name: name,
-    header: header,
+    header: name,
     minWidth: WIDTH.SS,
     width: WIDTH.SS,
     editor: false,
@@ -19,6 +19,20 @@ const id = (name = "", header = "") => {
     whiteSpace: false,
     rowSpan: false,
   };
+
+  if (key.length > 0) {
+    column.relations = [
+      {
+        targetNames: key,
+        editable({ value }) {
+          console.log(!value);
+          return !value;
+        },
+      },
+    ];
+  }
+
+  return column;
 };
 const text = (
   name = "",
