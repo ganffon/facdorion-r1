@@ -83,6 +83,10 @@ const FdrGrid = forwardRef((props, ref) => {
     }
   };
 
+  const onSelectList = (e) => {
+    console.log(e);
+  };
+
   const [tooltip, setTooltip] = useState({ x: 0, y: 0, open: false, contents: "" });
 
   const checkTooltip = (columnName) => {
@@ -176,6 +180,9 @@ const FdrGrid = forwardRef((props, ref) => {
             onEditingFinish={(e) => {
               onRegularExpression(e);
               onEditingFinish(e);
+            }}
+            onEditingStart={(e) => {
+              onSelectList(e);
             }}
           />
           {tooltip.open && (

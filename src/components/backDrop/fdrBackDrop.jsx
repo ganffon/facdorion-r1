@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as S from "../fdrComponents.styled";
-import dot from "img/ui/backDrop/dot.svg";
-import backDrop from "img/ui/backDrop/backDrop.svg";
-import working from "img/ui/backDrop/working.svg";
-import wait from "img/ui/backDrop/wait.svg";
+import dot from "img/backDrop/dot.svg";
+import backDrop from "img/backDrop/backDrop.svg";
+import working from "img/backDrop/working.svg";
+import wait from "img/backDrop/wait.svg";
 
 function FdrBackDrop(props) {
   const [backDropType, setBackDropType] = useState(false);
