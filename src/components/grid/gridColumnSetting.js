@@ -25,7 +25,6 @@ const id = (name = "", key = []) => {
       {
         targetNames: key,
         editable({ value }) {
-          console.log(!value);
           return !value;
         },
       },
@@ -125,6 +124,7 @@ const list = (
   hidden = false
 ) => {
   return {
+    className: "gridList",
     name: isCreate ? id : name,
     header: header,
     minWidth: width,
@@ -138,6 +138,9 @@ const list = (
           },
         }
       : false,
+    copyOptions: {
+      useListItemText: true,
+    },
     align: align,
     hidden: hidden,
     sortable: sortable,
@@ -176,6 +179,9 @@ const listGbn = (
           },
         }
       : false,
+    copyOptions: {
+      useListItemText: true,
+    },
     align: align,
     hidden: hidden,
     sortable: sortable,
