@@ -6,6 +6,12 @@ const URI = {
       PUT: { LINE: "/std/line" },
       DELETE: { LINE: "/std/line" },
     },
+    PROCESS: {
+      GET: { PROCESS: "/std/proc" },
+      POST: { PROCESS: "/std/proc" },
+      PUT: { PROCESS: "/std/proc" },
+      DELETE: { PROCESS: "/std/proc" },
+    },
   },
 };
 

@@ -6,8 +6,19 @@
   /* left: 43%; */
   accent-color: #f5329498;
 }
+.gridSelect {
+  background: #eaf4ea !important;
+}
 .gridFlag {
   background: #e5e5e5 !important;
+}
+
+.tui-grid-cell-required:not(.tui-grid-cell-editable):not(.tui-grid-cell-invalid) {
+  background: #ffff !important;
+}
+
+.tui-grid-cell-required.tui-grid-cell-editable.tui-grid-cell-invalid {
+  background: #faeaea !important;
 }
 
 .gridButton {

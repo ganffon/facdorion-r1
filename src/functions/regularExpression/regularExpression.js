@@ -126,3 +126,31 @@ export const decimalTwoPoints = (value) => {
   const pattern = /^[0-9]+(\.[0-9]{0,2})?$/;
   return pattern.test(value) ? value : "";
 };
+
+export const REG_EXP_NUMBER = /^\d+(\.\d+)?$/;
+
+export const REG_EXP_GRID_NUMBER = (value, decimal) => {
+  // const regex = /^-?\d+(\.\d+)?$/;
+  let regex;
+  if (decimal > 0) {
+    regex = /^-?\d+(\.\d{1,2})?$/;
+  } else {
+    regex = /^-?\d+$/;
+  }
+
+  // value가 null, undefined, 또는 빈 문자열인 경우 true 반환
+  if (value === null || value === undefined || value.toString().trim() === "") {
+    return true;
+  }
+
+  return regex.test(value.toString());
+};
+
+// export const REG_EXP_GRID_DECIMAL = (value) => {
+//   // value가 null, undefined, 또는 빈 문자열인 경우 true 반환
+//   if (value === null || value === undefined || value.toString().trim() === "") {
+//     return true;
+//   }
+
+//   return regex.test(value.toString());
+// };

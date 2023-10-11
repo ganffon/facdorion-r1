@@ -4,7 +4,7 @@ import { addRow, oneAddRow, removeRow } from "components/grid/gridFunc";
 import * as S from "../fdrComponents.styled";
 
 const FdrButtonGroup = forwardRef((props, ref) => {
-  const { addRowType = "", isCreate, setIsCreate, onCreate = () => {}, onModify = () => {} } = props;
+  const { addRowType = "", isEditable, setIsEditable, onCreate = () => {}, onModify = () => {} } = props;
   const onAddRow = () => {
     if (addRowType === "") {
       addRow(ref);
@@ -18,7 +18,7 @@ const FdrButtonGroup = forwardRef((props, ref) => {
 
   return (
     <S.FdrButtonGroup>
-      {isCreate ? (
+      {isEditable ? (
         <>
           <FdrButton id={"addRow"} onClick={onAddRow} />
           <FdrButton id={"cancelRow"} onClick={onCancelRow} />
@@ -27,18 +27,19 @@ const FdrButtonGroup = forwardRef((props, ref) => {
             id={"edit"}
             fill={true}
             onClick={() => {
-              setIsCreate(false);
+              setIsEditable(false);
             }}
           />
         </>
       ) : (
         <>
+          <FdrButton id={"addRow"} onClick={onAddRow} />
           <FdrButton id={"save"} onClick={onModify} />
           <FdrButton
             id={"new"}
             fill={true}
             onClick={() => {
-              setIsCreate(true);
+              setIsEditable(true);
             }}
           />
         </>

@@ -6,7 +6,7 @@ import FdrCombo from "components/combo/fdrCombo";
 import getDt from "functions/getDateTime/getDateTime";
 import { convertValueText, reverseValueText } from "functions/convertObj/cboList/objValueText";
 import { rest } from "api/rest";
-import { useLine } from "functions/getCboList/getCboList";
+import { useLine, useProcess } from "functions/getCboList/getCboList";
 import Contents from "components/layout/frame/contents";
 import FdrButton from "components/button/fdrButton";
 import { LayoutContext } from "components/layout/layout";
@@ -24,9 +24,11 @@ export function Line(props) {
   const { backDrop, snackBar } = useContext(LayoutContext);
   const [gridData, setGridData] = useState(null);
   const refGrid = useRef(null);
+  const refGridModal = useRef(null);
   const [lineList] = useLine();
-  const [isCreate, setIsCreate] = useState(false);
-  const { header, columnsModify, columnsPost, columnOptions } = LineSet(isCreate, refGrid, lineList);
+  const [processList] = useProcess();
+  const [isEditable, setIsEditable] = useState(false);
+  const { header, columnsModify, columnsPost, columnOptions } = LineSet(isEditable, refGrid, processList);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -104,19 +106,22 @@ export function Line(props) {
   };
 
   const onModify = () => {
-    gridModify(
-      backDrop,
-      snackBar,
-      refGrid,
-      SCM_MDM.LINE.PUT,
-      URI_MDM.LINE.PUT.LINE,
-      SCM_MDM.LINE.DELETE,
-      URI_MDM.LINE.DELETE.LINE,
-      onSearch
-    );
+    // gridModify(
+    //   backDrop,
+    //   snackBar,
+    //   refGrid,
+    //   SCM_MDM.LINE.PUT,
+    //   URI_MDM.LINE.PUT.LINE,
+    //   SCM_MDM.LINE.DELETE,
+    //   URI_MDM.LINE.DELETE.LINE,
+    //   onSearch
+    // );
+    const grid = refGrid?.current?.gridInst;
+    console.log(grid);
+    // console.log(grid.validate());
   };
   const onCreate = () => {
-    gridCreate(backDrop, snackBar, refGrid, SCM_MDM.LINE.POST, URI_MDM.LINE.POST.LINE, setIsCreate);
+    gridCreate(backDrop, snackBar, refGrid, SCM_MDM.LINE.POST, URI_MDM.LINE.POST.LINE, setIsEditable);
   };
 
   const onDblClick = (e) => {
@@ -127,7 +132,7 @@ export function Line(props) {
 
   useEffect(() => {
     onSearch();
-  }, [isCreate]);
+  }, [isEditable]);
 
   return (
     <Contents>
@@ -189,8 +194,8 @@ export function Line(props) {
           title={"투입물품"}
         >
           <FdrButtonGroup
-            isCreate={isCreate}
-            setIsCreate={setIsCreate}
+            isEditable={isEditable}
+            setIsEditable={setIsEditable}
             ref={refGrid}
             onCreate={onCreate}
             onModify={onModify}
@@ -207,7 +212,7 @@ export function Line(props) {
             header={header}
             data={gridData}
             draggable={false}
-            ref={refGrid}
+            ref={refGridModal}
             isReport={true}
             onDblClick={onDblClick}
             onClick={onClick}
