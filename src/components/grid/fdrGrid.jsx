@@ -35,7 +35,7 @@ const FdrGrid = forwardRef((props, ref) => {
       if (ref) {
         const grid = ref?.current?.gridInst;
         const coords = grid?.getFocusedCell();
-        if (coords) {
+        if (coords && coords.columnName !== 0) {
           grid?.startEditing(coords.rowKey, coords.columnName);
         }
       }
@@ -73,9 +73,6 @@ const FdrGrid = forwardRef((props, ref) => {
     const column = grid.getColumn(e.columnName);
 
     switch (column.className) {
-      case "gridNumber":
-        grid.setValue(e?.rowKey, e?.columnName, onlyNum(e?.value));
-        break;
       case "gridTime":
         grid.setValue(e?.rowKey, e?.columnName, onlyTime(e?.value));
         break;
@@ -84,7 +81,7 @@ const FdrGrid = forwardRef((props, ref) => {
   };
 
   const onSelectList = (e) => {
-    console.log(e);
+    // console.log(e);
   };
 
   const [tooltip, setTooltip] = useState({ x: 0, y: 0, open: false, contents: "" });
@@ -178,7 +175,7 @@ const FdrGrid = forwardRef((props, ref) => {
             }}
             onDblclick={onDblClick}
             onEditingFinish={(e) => {
-              onRegularExpression(e);
+              // onRegularExpression(e);
               onEditingFinish(e);
             }}
             onEditingStart={(e) => {

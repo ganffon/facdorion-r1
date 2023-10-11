@@ -21,9 +21,9 @@ function gridTheme() {
         showVerticalBorder: true,
         showHorizontalBorder: true,
       },
-      required: {
-        background: palette.green[100],
-      },
+      // required: {
+      //   background: palette.red[100],
+      // },
       editable: {
         background: palette.yellow[100],
       },
@@ -31,7 +31,7 @@ function gridTheme() {
         background: palette.white,
       },
       invalid: {
-        background: palette.green[100],
+        background: palette.red[100],
       },
     },
   });

@@ -59,50 +59,50 @@ export class gridButton {
 
   render(props) {
     const value = props.value;
-    const buttonName = props.columnInfo.renderer.options.name;
-    const buttonName2 = props.columnInfo.renderer.options.name2;
+    const name = props.columnInfo.renderer.options.name;
+    const nameSwitch = props.columnInfo.renderer.options.nameSwitch;
     const type = props.columnInfo.renderer.options.btnType;
     switch (type) {
       case "copy":
-        this.el.innerText = buttonName;
+        this.el.innerText = name;
         this.el.disabled = value ? true : false;
         break;
       case "cancel":
-        this.el.innerText = buttonName;
+        this.el.innerText = name;
         this.el.disabled = value ? false : true;
         break;
       case "packingInput":
-        if (buttonName2 === "") {
-          this.el.innerText = buttonName;
+        if (nameSwitch === "") {
+          this.el.innerText = name;
         } else {
-          this.el.innerText = value ? buttonName : buttonName2;
+          this.el.innerText = value ? name : nameSwitch;
           this.el.disabled = value === 2 ? false : true;
           this.el.className = value === 2 ? "gridButton grid__button--apply" : "gridButton grid__button--disabled";
         }
         break;
       case "inspDocumentApply":
-        if (buttonName2 === "") {
-          this.el.innerText = buttonName;
+        if (nameSwitch === "") {
+          this.el.innerText = name;
         } else {
-          this.el.innerText = value ? buttonName : buttonName2;
+          this.el.innerText = value ? name : nameSwitch;
         }
         this.el.className = value ? "gridButton grid__button--apply" : "gridButton";
         break;
       case "downtimeInput":
-        if (buttonName2 === "") {
-          this.el.innerText = buttonName;
+        if (nameSwitch === "") {
+          this.el.innerText = name;
         } else {
           switch (value) {
             case 0:
-              this.el.innerText = buttonName;
+              this.el.innerText = name;
               this.el.disabled = false;
               break;
             case 1:
-              this.el.innerText = buttonName2;
+              this.el.innerText = nameSwitch;
               this.el.disabled = true;
               break;
             case 2:
-              this.el.innerText = buttonName;
+              this.el.innerText = name;
               this.el.disabled = true;
               break;
             default:
@@ -110,10 +110,10 @@ export class gridButton {
         }
         break;
       default:
-        if (buttonName2 === "") {
-          this.el.innerText = buttonName;
+        if (nameSwitch === "") {
+          this.el.innerText = name;
         } else {
-          this.el.innerText = value ? buttonName : buttonName2;
+          this.el.innerText = value ? name : nameSwitch;
         }
     }
   }
@@ -205,17 +205,34 @@ export class EditorFloat3 {
  * @param {any} value 숫자 3자리 마다 콤마를 찍음
  * @returns
  */
+// export function gridNumComma(value) {
+//   if (value !== null) {
+//     // 소수점 이하 자리 수를 구함
+//     const decimalLength = value.toString().includes(".") ? value.toString().split(".")[1].length : 0;
+//     const int = value.toString().split(".")[0];
+//     const decimal = value.toString().split(".")[1];
+//     const formattedValue =
+//       decimalLength > 0
+//         ? int.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "." + decimal
+//         : value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+//     return formattedValue;
+//   } else {
+//     return null;
+//   }
+// }
 export function gridNumComma(value) {
   if (value !== null) {
-    // 소수점 이하 자리 수를 구함
-    const decimalLength = value.toString().includes(".") ? value.toString().split(".")[1].length : 0;
-    const int = value.toString().split(".")[0];
-    const decimal = value.toString().split(".")[1];
-    const formattedValue =
-      decimalLength > 0
-        ? int.replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "." + decimal
-        : value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    return formattedValue;
+    // 값을 문자열로 변환하고 '.'을 기준으로 분리
+    const parts = value.toString().split(".");
+
+    // 정수 부분에만 3자리마다 콤마 추가
+    const intPartWithComma = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+    // 소수 부분은 변경하지 않음
+    const decimalParts = parts.slice(1);
+
+    // 정수 부분과 소수 부분을 합쳐서 결과 반환
+    return [intPartWithComma, ...decimalParts].join(".");
   } else {
     return null;
   }
@@ -354,8 +371,6 @@ export const addRow = (ref) => {
     const grid = ref?.current?.gridInst;
     grid?.appendRow({ rowState: "add" });
     const rowKey = grid?.getRowCount() - 1;
-    console.log(grid);
-    grid?.addCellClassName(rowKey, "line_cd", "tui-grid-cell-editable");
     grid?.focus(rowKey, 0);
   }
 };
@@ -495,3 +510,37 @@ export const req = (columnName) => {
 //     checkboxInput.checked = Boolean(props.value);
 //   }
 // }
+
+export class CustomNumberEditor {
+  constructor(props) {
+    const el = document.createElement("input");
+    el.type = "text";
+    const decimal = props?.columnInfo?.editor?.options?.decimal;
+    let placeholder;
+    if (decimal > 0) {
+      placeholder = `소수점 ${decimal}자리 입력`;
+    } else {
+      placeholder = `정수 입력`;
+    }
+    el.placeholder = placeholder;
+
+    this.el = el;
+    this.props = props;
+  }
+
+  getElement() {
+    return this.el;
+  }
+
+  getValue() {
+    return this.el.value;
+  }
+
+  setValue(value) {
+    this.el.value = value;
+  }
+
+  mounted(value) {
+    this.el.focus();
+  }
+}

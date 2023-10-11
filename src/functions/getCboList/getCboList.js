@@ -33,3 +33,19 @@ export const useLine = () => {
   }, []);
   return [lineList];
 };
+
+export const useProcess = () => {
+  const [processList, setProcessList] = useState([]);
+  useEffect(() => {
+    const getCboOpt = async () => {
+      const result = await rest.get(URI_MDM.PROCESS.GET.PROCESS);
+      if (result.flag) {
+        const convert = convertValueText(result.res, "proc_id", "proc_nm");
+        const sort = cboSort(convert);
+        setProcessList(sort);
+      }
+    };
+    getCboOpt();
+  }, []);
+  return [processList];
+};

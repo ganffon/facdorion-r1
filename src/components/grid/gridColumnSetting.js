@@ -1,542 +1,379 @@
-import { gridCheckBox, gridButton, multiLine, gridNumComma, gridPassword, onlyNumGrid } from "./gridFunc";
-import * as RE from "../../functions/regularExpression/regularExpression";
+import {
+  gridCheckBox,
+  gridButton,
+  multiLine,
+  gridNumComma,
+  gridPassword,
+  onlyNumGrid,
+  CustomNumberEditor,
+} from "./gridFunc";
 import condition from "../../functions/gridColumnCondition/condition";
 import { WIDTH } from "constant/grid";
+import { REG_EXP_GRID_DECIMAL, REG_EXP_GRID_NUMBER } from "functions/regularExpression/regularExpression";
 
-const hidden = process.env.REACT_APP_COLUMN_HIDDEN === "true" ? true : false;
+const envHidden = process.env.REACT_APP_COLUMN_HIDDEN === "true" ? true : false;
 
-const id = (name = "", key = []) => {
-  const column = {
-    name: name,
-    header: name,
-    minWidth: WIDTH.SS,
-    width: WIDTH.SS,
-    editor: false,
-    align: "left",
-    hidden: hidden,
-    sortable: false,
-    filter: false,
-    whiteSpace: false,
-    rowSpan: false,
-  };
-
-  if (key.length > 0) {
-    column.relations = [
-      {
-        targetNames: key,
-        editable({ value }) {
-          return !value;
-        },
-      },
-    ];
-  }
-
-  return column;
-};
-const text = (
-  name = "",
-  header = "",
-  isCreate = false,
-  width = WIDTH.S,
-  sortable = false,
-  filter = false,
-  rowSpan = false,
-  whiteSpace = false,
-  hidden = false
-) => {
-  return {
-    name: name,
-    header: header,
-    minWidth: width,
-    width: width,
-    editor: isCreate ? "text" : false,
-    align: "left",
-    hidden: hidden,
-    sortable: sortable,
-    filter: filter ? "select" : false,
-    whiteSpace: whiteSpace,
-    rowSpan: rowSpan,
-  };
-};
-const textC = (
-  name = "",
-  header = "",
-  isCreate = false,
-  width = WIDTH.S,
-  sortable = false,
-  filter = false,
-  rowSpan = false,
-  whiteSpace = false,
-  hidden = false
-) => {
-  return {
-    name: name,
-    header: header,
-    minWidth: width,
-    width: width,
-    editor: isCreate ? "text" : false,
-    align: "center",
-    hidden: hidden,
-    sortable: sortable,
-    filter: filter ? "select" : false,
-    whiteSpace: whiteSpace,
-    rowSpan: rowSpan,
-  };
-};
-const textR = (
-  name = "",
-  header = "",
-  isCreate = false,
-  hidden = false,
-  width = WIDTH.S,
-  sortable = false,
-  filter = false,
-  whiteSpace = false,
-  rowSpan = false
-) => {
-  return {
-    name: name,
-    header: header,
-    minWidth: width,
-    width: width,
-    editor: isCreate ? "text" : false,
-    align: "right",
-    hidden: hidden,
-    sortable: sortable,
-    filter: filter ? "select" : false,
-    whiteSpace: whiteSpace,
-    rowSpan: rowSpan,
-  };
-};
-
-const list = (
-  id = "",
-  name = "",
-  header = "",
-  listArray = [],
-  isCreate = false,
-  width = WIDTH.S,
-  align = "left",
-  sortable = false,
-  filter = false,
-  rowSpan = false,
-  whiteSpace = false,
-  hidden = false
-) => {
-  return {
-    className: "gridList",
-    name: isCreate ? id : name,
-    header: header,
-    minWidth: width,
-    width: width,
-    formatter: isCreate ? "listItemText" : null,
-    editor: isCreate
-      ? {
-          type: "select",
-          options: {
-            listItems: listArray,
-          },
-        }
-      : false,
-    copyOptions: {
-      useListItemText: true,
-    },
-    align: align,
-    hidden: hidden,
-    sortable: sortable,
-    filter: filter,
-    whiteSpace: whiteSpace,
-    rowSpan: rowSpan,
-  };
-};
-
-const listGbn = (
-  name = "",
-  header = "",
-  isCreate = false,
-  width = WIDTH.S,
-  sortable = false,
-  filter = false,
-  align = "left",
-  rowSpan = false,
-  whiteSpace = false,
-  hidden = false
-) => {
-  return {
-    name: name,
-    header: header,
-    minWidth: width,
-    width: width,
-    formatter: isCreate ? "listItemText" : null,
-    editor: isCreate
-      ? {
-          type: "select",
-          options: {
-            listItems: [
-              { text: "제품", value: "제품" },
-              { text: "공정", value: "공정" },
-            ],
-          },
-        }
-      : false,
-    copyOptions: {
-      useListItemText: true,
-    },
-    align: align,
-    hidden: hidden,
-    sortable: sortable,
-    filter: filter,
-    whiteSpace: whiteSpace,
-    rowSpan: rowSpan,
-  };
-};
-const check = (
-  name = "",
-  header = "",
-  isCreate = false,
-  ref = null,
-  width = WIDTH.SS,
-  sortable = false,
-  filter = false,
-  rowSpan = false,
-  whiteSpace = false,
-  hidden = false
-) => {
-  return {
-    name: name,
-    header: header,
-    minWidth: width,
-    width: width,
-    editor: false,
-    renderer: {
-      type: gridCheckBox,
-      options: {
-        name: name,
-        disabled: isCreate ? false : true,
-        gridInstance: ref?.current?.gridInst,
-      },
-    },
-    className: isCreate ? "tui-grid-cell-editable" : "",
-    align: "center",
-    hidden: hidden,
-    sortable: sortable,
-    filter: filter,
-    whiteSpace: whiteSpace,
-    rowSpan: rowSpan,
-  };
-};
-const button = (
-  name = "",
-  header = "",
-  btnName = "",
-  btnName2 = "",
-  func = () => {},
-  btnType = "",
-  disabled = false
-) => {
-  return {
-    name: name,
-    header: header,
-    minWidth: WIDTH.S,
-    width: WIDTH.S,
-    align: "center",
-    editor: false,
-    renderer: {
-      type: gridButton,
-      options: {
-        name: btnName,
-        name2: btnName2,
-        onClick: func,
-        disabled: disabled,
-        btnType: btnType,
-      },
-    },
-    hidden: false,
-    sortable: false,
-    filter: false,
-    whiteSpace: false,
-    rowSpan: false,
-  };
-};
 /**
- *
- * @param {*} name
- * @param {*} header
- * @param {*} isCreate
- * @param {*} minWidth
- * 실제 입력받는 페이지에서 Grid Edit Finish 에 정규표현식 적용해줘야함
- * if (Condition(e, ["columnName"])) {
- *  RE.NumComma(e, refGrid, "columnName");
- * }
- * @returns
+ * @param {Object} props
+ * @param {boolean} props.isEditable
+ * @param {('id'|'text'|'number'|'date'|'year'|'month'|'day'|'time'|'list'|'select'|'check'|'button')} props.type
+ * @param {string} props.id
+ * @param {string} props.listID
+ * @param {string} props.name
+ * @param {Array} props.key
+ * @param {number} props.width
+ * @param {string} props.align
+ * @param {boolean} props.hidden
+ * @param {boolean} props.sortable
+ * @param {(boolean|string)} props.filter
+ * @param {boolean} props.whiteSpace
+ * @param {boolean} props.rowSpan
+ * @param {Array} props.listArray
+ * @param {Array} props.ref
+ * @param {any} props.buttonFunc
+ * @returns {Object}
  */
-const number = (
-  name = "",
-  header = "",
-  isCreate = false,
-  width = WIDTH.S,
-  sortable = false,
-  filter = false,
-  rowSpan = false,
-  hidden = false
-) => {
-  return {
-    className: "gridNumber",
-    name: name,
-    header: header,
-    minWidth: width,
-    width: width,
-    align: "right",
-    editor: isCreate ? "text" : false,
-    formatter: function (value) {
-      return gridNumComma(value.value);
-    },
-    hidden: hidden,
-    sortable: sortable,
-    filter: filter,
-    whiteSpace: false,
-    rowSpan: rowSpan,
-  };
-};
-const numberC = (
-  name = "",
-  header = "",
-  isCreate = false,
-  width = WIDTH.S,
-  sortable = false,
-  filter = false,
-  rowSpan = false,
-  hidden = false
-) => {
-  return {
-    className: "gridNumber",
-    name: name,
-    header: header,
-    minWidth: width,
-    width: width,
-    align: "center",
-    editor: isCreate ? "text" : false,
-    formatter: function (value) {
-      return gridNumComma(value.value);
-    },
-    hidden: hidden,
-    sortable: sortable,
-    filter: filter,
-    whiteSpace: false,
-    rowSpan: rowSpan,
-  };
-};
-const numberL = (
-  name = "",
-  header = "",
-  isCreate = false,
-  width = WIDTH.S,
-  sortable = false,
-  filter = false,
-  rowSpan = false,
-  hidden = false
-) => {
-  return {
-    className: "gridNumber",
-    name: name,
-    header: header,
-    minWidth: width,
-    width: width,
-    align: "left",
-    editor: isCreate ? "text" : false,
-    formatter: function (value) {
-      return gridNumComma(value.value);
-    },
-    hidden: hidden,
-    sortable: sortable,
-    filter: filter,
-    whiteSpace: false,
-    rowSpan: rowSpan,
-  };
-};
 
-const select = (name = "", header = "", isCreate = false, width = WIDTH.S) => {
-  return {
-    name: name,
-    header: header,
-    minWidth: width,
-    width: width,
-    align: "left",
-    editor: false,
-    validation: isCreate
-      ? {
-          required: true,
-        }
-      : null,
-    hidden: false,
-    sortable: false,
-    filter: false,
-    whiteSpace: false,
-    rowSpan: false,
-  };
-};
-const selectC = (name = "", header = "", isCreate = false, width = WIDTH.S) => {
-  return {
-    name: name,
-    header: header,
-    minWidth: width,
-    width: width,
-    align: "center",
-    editor: false,
-    validation: isCreate
-      ? {
-          required: true,
-        }
-      : null,
-    hidden: false,
-    sortable: false,
-    filter: false,
-    whiteSpace: false,
-    rowSpan: false,
-  };
-};
-const selectR = (name = "", header = "", isCreate = false, width = WIDTH.S) => {
-  return {
-    name: name,
-    header: header,
-    minWidth: width,
-    width: width,
-    align: "right",
-    editor: false,
-    validation: isCreate
-      ? {
-          required: true,
-        }
-      : null,
-    hidden: false,
-    sortable: false,
-    filter: false,
-    whiteSpace: false,
-    rowSpan: false,
-  };
-};
+export const col = (props) => {
+  const {
+    type = "id" |
+      "text" |
+      "number" |
+      "date" |
+      "year" |
+      "month" |
+      "day" |
+      "time" |
+      "list" |
+      "select" |
+      "check" |
+      "button",
+    id = "",
+    key = [],
+    name = "",
+    listID,
+    listArray = [],
+    width = WIDTH.S,
+    align = "",
+    hidden = false,
+    sortable = false,
+    filter = false | "select",
+    whiteSpace = false,
+    rowSpan = false,
+    isEditable = false,
+    ref = [],
+    buttonFunc = () => {},
+    btnName = "",
+    btnNameSwitch = "",
+    btnType = "",
+    btnDisabled = false,
+    required = false,
+    min = null,
+    max = null,
+    decimal = 0,
+  } = props;
 
-const date = (name = "", header = "", isCreate = false, width = WIDTH.S, sortable = false) => {
-  return {
-    name: name,
-    header: header,
-    minWidth: width,
-    width: width,
-    align: "center",
-    editor: isCreate
-      ? {
-          type: "datePicker",
-          options: {
-            language: "ko",
-            format: "yyyy-MM-dd",
+  let column;
+  switch (type) {
+    case "id":
+      column = {
+        name: id,
+        header: id,
+        minWidth: WIDTH.SS,
+        width: WIDTH.SS,
+        editor: false,
+        align: "left",
+        hidden: envHidden,
+        sortable: false,
+        filter: false,
+        whiteSpace: false,
+        rowSpan: false,
+      };
+      if (key.length > 0) {
+        column.relations = [
+          {
+            targetNames: key,
+            editable({ value }) {
+              return !value;
+            },
           },
-        }
-      : false,
-    hidden: false,
-    sortable: sortable,
-    filter: false,
-    whiteSpace: false,
-    rowSpan: false,
-  };
-};
+        ];
+      }
 
-const month = (name = "", header = "", isCreate = false, width = WIDTH.S, sortable = false) => {
-  return {
-    name: name,
-    header: header,
-    minWidth: width,
-    width: width,
-    align: "center",
-    editor: isCreate
-      ? {
-          type: "datePicker",
+      return column;
+
+    case "text":
+      column = {
+        name: id,
+        header: name,
+        minWidth: width,
+        width: width,
+        editor: isEditable ? "text" : false,
+        align: align === "" ? "left" : align,
+        hidden: hidden,
+        sortable: sortable,
+        filter: filter,
+        whiteSpace: whiteSpace,
+        rowSpan: rowSpan,
+        validation: { required: required },
+      };
+
+      return column;
+
+    case "list":
+      column = {
+        className: "gridList",
+        name: isEditable ? id : listID,
+        header: name,
+        minWidth: width,
+        width: width,
+        align: align === "" ? "left" : align,
+        formatter: isEditable ? "listItemText" : null,
+        editor: isEditable
+          ? {
+              type: "select",
+              options: {
+                listItems: listArray,
+              },
+            }
+          : false,
+        copyOptions: {
+          useListItemText: true,
+        },
+        hidden: hidden,
+        sortable: sortable,
+        filter: filter,
+        whiteSpace: whiteSpace,
+        rowSpan: rowSpan,
+      };
+
+      return column;
+    case "check":
+      column = {
+        className: isEditable ? "tui-grid-cell-editable" : "",
+        name: isEditable ? id : listID,
+        header: name,
+        minWidth: width,
+        width: width,
+        align: "center",
+        editor: false,
+        renderer: {
+          type: gridCheckBox,
           options: {
-            language: "ko",
-            format: "yyyy-MM",
-            type: "month",
+            name: name,
+            disabled: isEditable ? false : true,
+            gridInstance: ref?.current?.gridInst,
           },
-        }
-      : false,
-    hidden: false,
-    sortable: sortable,
-    filter: false,
-    whiteSpace: false,
-    rowSpan: false,
-  };
-};
-const year = (name = "", header = "", isCreate = false, width = WIDTH.S, sortable = false) => {
-  return {
-    name: name,
-    header: header,
-    minWidth: width,
-    width: width,
-    align: "center",
-    editor: isCreate
-      ? {
-          type: "datePicker",
+        },
+        hidden: hidden,
+        sortable: sortable,
+        filter: filter,
+        whiteSpace: whiteSpace,
+        rowSpan: rowSpan,
+      };
+
+      return column;
+
+    case "button":
+      column = {
+        name: id,
+        header: name,
+        minWidth: width,
+        width: width,
+        align: "center",
+        editor: false,
+        renderer: {
+          type: gridButton,
           options: {
-            language: "ko",
-            format: "yyyy",
-            type: "year",
+            name: btnName,
+            nameSwitch: btnNameSwitch,
+            onClick: buttonFunc,
+            disabled: btnDisabled,
+            btnType: btnType,
           },
-        }
-      : false,
-    hidden: false,
-    sortable: sortable,
-    filter: false,
-    whiteSpace: false,
-    rowSpan: false,
-  };
+        },
+        hidden: hidden,
+        sortable: sortable,
+        filter: filter,
+        whiteSpace: whiteSpace,
+        rowSpan: rowSpan,
+      };
+
+      return column;
+
+    case "number":
+      column = {
+        className: "gridNumber",
+        name: id,
+        header: name,
+        minWidth: width,
+        width: width,
+        align: align === "" ? "right" : align,
+        editor: isEditable
+          ? {
+              type: CustomNumberEditor,
+              options: {
+                decimal: decimal,
+              },
+            }
+          : false,
+        formatter: function (value) {
+          return gridNumComma(value.value);
+        },
+        hidden: hidden,
+        sortable: sortable,
+        filter: filter,
+        whiteSpace: whiteSpace,
+        rowSpan: rowSpan,
+        validation: {
+          required: required,
+          min: min,
+          max: max,
+          validatorFn: function (value) {
+            return REG_EXP_GRID_NUMBER(value, decimal);
+          },
+        },
+      };
+
+      return column;
+    case "select":
+      column = {
+        className: "gridSelect",
+        name: id,
+        header: name,
+        minWidth: width,
+        width: width,
+        align: "left",
+        editor: false,
+        hidden: hidden,
+        sortable: sortable,
+        filter: filter,
+        whiteSpace: whiteSpace,
+        rowSpan: rowSpan,
+      };
+
+      return column;
+
+    case "date":
+      column = {
+        name: id,
+        header: name,
+        minWidth: width,
+        width: width,
+        align: "center",
+        editor: isEditable
+          ? {
+              type: "datePicker",
+              options: {
+                language: "ko",
+                format: "yyyy-MM-dd",
+              },
+            }
+          : false,
+        hidden: hidden,
+        sortable: sortable,
+        filter: filter,
+        whiteSpace: whiteSpace,
+        rowSpan: rowSpan,
+      };
+      return column;
+
+    case "year":
+      column = {
+        name: id,
+        header: name,
+        minWidth: width,
+        width: width,
+        align: "center",
+        editor: isEditable
+          ? {
+              type: "datePicker",
+              options: {
+                language: "ko",
+                format: "yyyy",
+                type: "year",
+              },
+            }
+          : false,
+        hidden: hidden,
+        sortable: sortable,
+        filter: filter,
+        whiteSpace: whiteSpace,
+        rowSpan: rowSpan,
+      };
+
+      return column;
+
+    case "month":
+      column = {
+        name: id,
+        header: name,
+        minWidth: width,
+        width: width,
+        align: "center",
+        editor: isEditable
+          ? {
+              type: "datePicker",
+              options: {
+                language: "ko",
+                format: "yyyy-MM",
+                type: "month",
+              },
+            }
+          : false,
+        hidden: hidden,
+        sortable: sortable,
+        filter: filter,
+        whiteSpace: whiteSpace,
+        rowSpan: rowSpan,
+      };
+
+      return column;
+
+    case "time":
+      column = {
+        className: "gridTime",
+        name: id,
+        header: name,
+        minWidth: width,
+        width: width,
+        editor: isEditable ? "text" : false,
+        align: "center",
+        hidden: hidden,
+        sortable: sortable,
+        filter: filter,
+        whiteSpace: whiteSpace,
+        rowSpan: rowSpan,
+      };
+
+      return column;
+
+    case "password":
+      column = {
+        name: id,
+        header: name,
+        minWidth: WIDTH.M,
+        width: WIDTH.M,
+        align: "left",
+        editor: isEditable ? "password" : false,
+        formatter: function (value) {
+          return gridPassword(value, true);
+        },
+        hidden: hidden,
+        sortable: false,
+        filter: false,
+        whiteSpace: false,
+        rowSpan: false,
+      };
+
+      return column;
+
+    default:
+      alert("col type 지정 오류!");
+  }
 };
 
-const time = (
-  name = "",
-  header = "",
-  isCreate = false,
-  hidden = false,
-  width = WIDTH.SS,
-  align = "center",
-  sortable = false,
-  filter = false,
-  whiteSpace = false,
-  rowSpan = false
-) => {
-  return {
-    className: "gridTime",
-    name: name,
-    header: header,
-    minWidth: width,
-    width: width,
-    editor: isCreate ? "text" : false,
-    align: align,
-    hidden: hidden,
-    sortable: sortable,
-    filter: filter ? "select" : false,
-    whiteSpace: whiteSpace,
-    rowSpan: rowSpan,
-  };
-};
-
-const password = (name = "", header = "", isCreate = false, hidden = false) => {
-  return {
-    name: name,
-    header: header,
-    minWidth: WIDTH.M,
-    width: WIDTH.M,
-    align: "left",
-    editor: isCreate ? "password" : false,
-    formatter: function (value) {
-      return gridPassword(value, true);
-    },
-    hidden: hidden,
-    sortable: false,
-    filter: false,
-    whiteSpace: false,
-    rowSpan: false,
-  };
-};
-
-const multi = (names = []) => {
+export const multiCol = (names = []) => {
   const columns = names.map((name) => {
     return {
       name: name,
@@ -547,34 +384,4 @@ const multi = (names = []) => {
   return {
     columns,
   };
-};
-
-const RENumComma = (e, refGrid, columnName) => {
-  if (condition(e, [columnName])) {
-    RE.numComma(e, refGrid, columnName);
-  }
-};
-
-export const col = {
-  id,
-  text,
-  textC,
-  textR,
-  list,
-  listGbn,
-  check,
-  button,
-  number,
-  numberC,
-  numberL,
-  select,
-  selectC,
-  selectR,
-  date,
-  month,
-  year,
-  time,
-  password,
-  multi,
-  RENumComma,
 };
