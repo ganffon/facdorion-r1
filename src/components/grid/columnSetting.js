@@ -25,7 +25,7 @@ const envHidden = process.env.REACT_APP_COLUMN_HIDDEN === "true" ? true : false;
  * @param {string} props.align
  * @param {boolean} props.hidden
  * @param {boolean} props.sortable
- * @param {(boolean|string)} props.filter
+ * @param {(boolean|"select")} props.filter
  * @param {boolean} props.whiteSpace
  * @param {boolean} props.rowSpan
  * @param {Array} props.listArray
@@ -151,7 +151,7 @@ export const col = (props) => {
     case "check":
       column = {
         className: isEditable ? "tui-grid-cell-editable" : "",
-        name: isEditable ? id : listID,
+        name: id,
         header: name,
         minWidth: width,
         width: width,
@@ -160,7 +160,7 @@ export const col = (props) => {
         renderer: {
           type: gridCheckBox,
           options: {
-            name: name,
+            name: id,
             disabled: isEditable ? false : true,
             gridInstance: ref?.current?.gridInst,
           },
@@ -230,7 +230,10 @@ export const col = (props) => {
           min: min,
           max: max,
           validatorFn: function (value) {
-            return REG_EXP_GRID_NUMBER(value, decimal);
+            return {
+              valid: REG_EXP_GRID_NUMBER(value, decimal),
+              meta: { customErrorCode: "DECIMAL", decimal: decimal },
+            };
           },
         },
       };

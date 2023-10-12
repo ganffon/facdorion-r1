@@ -13,8 +13,10 @@ export class gridCheckBox {
 
       if (el.checked) {
         grid.setValue(rowKey, elName, true);
+        grid.setValue(rowKey, "rowState", "editF");
       } else {
         grid.setValue(rowKey, elName, false);
+        grid.setValue(rowKey, "rowState", "editF");
       }
     });
 
@@ -369,7 +371,7 @@ export const cancelRow = (ref, setGridData, btnRowKey = null) => {
 export const addRow = (ref) => {
   if (ref) {
     const grid = ref?.current?.gridInst;
-    grid?.appendRow({ rowState: "add" });
+    grid?.appendRow({ rowState: "addF" });
     const rowKey = grid?.getRowCount() - 1;
     grid?.focus(rowKey, 0);
   }
@@ -385,7 +387,7 @@ export const oneAddRow = (ref) => {
     if (hasAppendedRow) {
       return;
     }
-    grid?.appendRow({ rowState: "add" });
+    grid?.appendRow({ rowState: "addF" });
     const rowKey = grid?.getRowCount() - 1;
     grid?.focus(rowKey, 0);
   }
@@ -399,7 +401,7 @@ export const removeRow = (ref) => {
     const coords = grid.getFocusedCell();
     if (coords.rowKey !== null) {
       const selectedRowData = ref.current.gridInst.getRow(coords.rowKey);
-      if ("rowState" in selectedRowData) {
+      if (selectedRowData.rowState === "addF") {
         grid?.removeRow(coords.rowKey);
       }
     } else {
@@ -407,7 +409,7 @@ export const removeRow = (ref) => {
       if (rowCount > 0) {
         const lastRowData = ref.current.gridInst.getRowAt(rowCount - 1);
         const lastRowKey = lastRowData.rowKey;
-        if (lastRowData.rowState === "add") {
+        if (lastRowData.rowState === "addF") {
           grid?.removeRow(lastRowKey);
         }
       }
@@ -514,18 +516,21 @@ export const req = (columnName) => {
 export class CustomNumberEditor {
   constructor(props) {
     const el = document.createElement("input");
+
     el.type = "text";
     const decimal = props?.columnInfo?.editor?.options?.decimal;
-    let placeholder;
     if (decimal > 0) {
-      placeholder = `소수점 ${decimal}자리 입력`;
+      el.placeholder = `소수점 ${decimal}자리 입력`;
     } else {
-      placeholder = `정수 입력`;
+      el.placeholder = `정수 입력`;
     }
-    el.placeholder = placeholder;
 
     this.el = el;
     this.props = props;
+
+    if (props.value) {
+      this.setValue(props.value);
+    }
   }
 
   getElement() {
@@ -540,7 +545,8 @@ export class CustomNumberEditor {
     this.el.value = value;
   }
 
-  mounted(value) {
+  mounted() {
     this.el.focus();
+    this.el.select();
   }
 }

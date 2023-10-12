@@ -1,16 +1,16 @@
 import "components/grid/gridStyle.css";
-import { col, colId } from "components/grid/gridColumnSetting";
+import { col } from "components/grid/columnSetting";
 import { WIDTH } from "constant/grid";
 import { req } from "components/grid/gridFunc";
-import { CN } from "api/uri";
+import { CN } from "components/grid/columnName";
 
 function LineSet(isEditable, ref, processList) {
   const columnsModify = [
     col({ type: "id", id: "line_id", key: ["line_cd"] }),
-    col({ type: "text", id: "line_cd", name: CN.line_cd, isEditable: true, required: true }),
-    col({ type: "text", id: "line_nm", name: CN.line_nm, isEditable: true, required: true }),
-    col({ type: "check", id: "rework_fg", name: CN.rework_fg, ref: ref, isEditable: true }),
-    col({ type: "number", id: "number", name: "숫자형", isEditable: true, decimal: 2 }),
+    col({ type: "text", id: "line_cd", name: CN.line_cd["ko"], isEditable: true, required: true }),
+    col({ type: "text", id: "line_nm", name: CN.line_nm["ko"], isEditable: true, required: true }),
+    col({ type: "check", id: "rework_fg", name: CN.rework_fg["ko"], ref: ref, isEditable: true }),
+    col({ type: "number", id: "number", name: CN.number["ko"], isEditable: true, decimal: 2, min: 10, max: 500 }),
     col({
       type: "list",
       id: "proc_id",
@@ -21,6 +21,7 @@ function LineSet(isEditable, ref, processList) {
       isEditable: true,
     }),
     col({ type: "select", id: "select", name: "셀렉트" }),
+    col({ type: "text", id: "rowState", name: "rowState" }),
   ];
   const columnsPost = [
     // col.text("line_cd", req(CN.line_cd), true, WIDTH.M),

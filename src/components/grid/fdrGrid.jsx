@@ -80,8 +80,22 @@ const FdrGrid = forwardRef((props, ref) => {
     }
   };
 
-  const onSelectList = (e) => {
-    // console.log(e);
+  const onEditFlag = (e) => {
+    console.log("onEditFlag");
+    const afterChange = (e) => {
+      console.log("afterChange Start");
+      const rowKey = e?.changes[0].rowKey;
+      const grid = ref?.current?.gridInst;
+      if (grid.getValue(rowKey, "rowState") !== ("addF" || "addS")) {
+        console.log("afterChange");
+        grid.setValue(rowKey, "rowState", "editF");
+      }
+    };
+    const grid = ref?.current?.gridInst;
+
+    if (grid) {
+      grid.eventBus.on("afterChange", afterChange);
+    }
   };
 
   const [tooltip, setTooltip] = useState({ x: 0, y: 0, open: false, contents: "" });
@@ -96,7 +110,7 @@ const FdrGrid = forwardRef((props, ref) => {
     }
   };
   useEffect(() => {
-    const Grid = ref.current?.gridInst;
+    const grid = ref.current?.gridInst;
 
     let tooltipTimeout;
     const handleMouseOver = (e) => {
@@ -123,9 +137,9 @@ const FdrGrid = forwardRef((props, ref) => {
       setTooltip({ ...tooltip, contents: "", open: false });
     };
 
-    if (Grid) {
-      Grid.eventBus.on("mouseover", handleMouseOver);
-      Grid.eventBus.on("mouseout", handleMouseOut);
+    if (grid) {
+      grid.eventBus.on("mouseover", handleMouseOver);
+      grid.eventBus.on("mouseout", handleMouseOut);
     }
   }, []);
 
@@ -179,7 +193,7 @@ const FdrGrid = forwardRef((props, ref) => {
               onEditingFinish(e);
             }}
             onEditingStart={(e) => {
-              onSelectList(e);
+              onEditFlag(e);
             }}
           />
           {tooltip.open && (
