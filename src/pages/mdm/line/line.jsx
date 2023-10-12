@@ -19,6 +19,8 @@ import { gridCreate, gridModify } from "functions/convertObj/grid/transferParams
 import FdrButtonGroup from "components/button/fdrButtonGroup";
 import condition from "functions/gridColumnCondition/condition";
 import FdrModal from "components/modal/fdrModal";
+import { gridValidate, validateMsg } from "components/grid/validate";
+import ValidateAlert from "components/alert/gridValidate/validateAlert";
 
 export function Line(props) {
   const { backDrop, snackBar } = useContext(LayoutContext);
@@ -87,7 +89,7 @@ export function Line(props) {
     // }, 8000);
 
     const params = {
-      line_nm2: filter.aInput,
+      line_nm: filter.aInput,
       prod_nm: filter.bInput,
       model_nm: filter.aCombo?.value,
       subtotal: filter.radioTest,
@@ -97,7 +99,8 @@ export function Line(props) {
     try {
       backDrop.set(true);
       const data = await rest.get(URI_MDM.LINE.GET.INCLUDE_REWORK, params);
-      setGridData(data.res);
+      const rowStateData = data.res.map((item) => ({ ...item, rowState: "get" }));
+      setGridData(rowStateData);
     } catch (err) {
       alert(err);
     } finally {
@@ -105,20 +108,22 @@ export function Line(props) {
     }
   };
 
+  const [isValidate, setIsValidate] = useState({ open: false, validateErrorInfo: [] });
   const onModify = () => {
-    // gridModify(
-    //   backDrop,
-    //   snackBar,
-    //   refGrid,
-    //   SCM_MDM.LINE.PUT,
-    //   URI_MDM.LINE.PUT.LINE,
-    //   SCM_MDM.LINE.DELETE,
-    //   URI_MDM.LINE.DELETE.LINE,
-    //   onSearch
-    // );
-    const grid = refGrid?.current?.gridInst;
-    console.log(grid);
-    // console.log(grid.validate());
+    const validateError = gridValidate(refGrid);
+
+    if (validateError?.length > 0) {
+      setIsValidate({ ...isValidate, open: true, validateErrorInfo: validateError });
+    } else {
+      gridModify({
+        backDrop: backDrop,
+        snackBar: snackBar,
+        ref: refGrid,
+        URI: { POST: URI_MDM.LINE.POST.LINE, PUT: URI_MDM.LINE.PUT.LINE, DELETE: URI_MDM.LINE.DELETE.LINE },
+        SCM: { POST: SCM_MDM.LINE.POST, PUT: SCM_MDM.LINE.PUT, DELETE: SCM_MDM.LINE.DELETE },
+        onSearch: onSearch,
+      });
+    }
   };
   const onCreate = () => {
     gridCreate(backDrop, snackBar, refGrid, SCM_MDM.LINE.POST, URI_MDM.LINE.POST.LINE, setIsEditable);
@@ -219,6 +224,7 @@ export function Line(props) {
           />
         </FdrModal>
       )}
+      {isValidate.open && <ValidateAlert setIsOpen={setIsValidate} validateErrorInfo={isValidate.validateErrorInfo} />}
     </Contents>
   );
 }

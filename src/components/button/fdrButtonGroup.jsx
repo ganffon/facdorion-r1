@@ -18,32 +18,9 @@ const FdrButtonGroup = forwardRef((props, ref) => {
 
   return (
     <S.FdrButtonGroup>
-      {isEditable ? (
-        <>
-          <FdrButton id={"addRow"} onClick={onAddRow} />
-          <FdrButton id={"cancelRow"} onClick={onCancelRow} />
-          <FdrButton id={"save"} onClick={onCreate} />
-          <FdrButton
-            id={"edit"}
-            fill={true}
-            onClick={() => {
-              setIsEditable(false);
-            }}
-          />
-        </>
-      ) : (
-        <>
-          <FdrButton id={"addRow"} onClick={onAddRow} />
-          <FdrButton id={"save"} onClick={onModify} />
-          <FdrButton
-            id={"new"}
-            fill={true}
-            onClick={() => {
-              setIsEditable(true);
-            }}
-          />
-        </>
-      )}
+      <FdrButton id={"addRow"} onClick={onAddRow} />
+      <FdrButton id={"cancelRow"} onClick={onCancelRow} />
+      <FdrButton id={"save"} onClick={onModify} />
     </S.FdrButtonGroup>
   );
 });
