@@ -15,12 +15,13 @@ import LineSet from "./line.set";
 import FdrRadio from "components/radio/fdrRadio";
 import FdrCheckBox from "components/checkBox/fdrCheckBox";
 import { SCM_MDM, URI_MDM } from "api/uri";
-import { gridCreate, gridModify } from "functions/convertObj/grid/transferParams";
+import { gridCreate, gridDeleteCheck, gridModify } from "functions/convertObj/grid/transferParams";
 import FdrButtonGroup from "components/button/fdrButtonGroup";
 import condition from "functions/gridColumnCondition/condition";
 import FdrModal from "components/modal/fdrModal";
 import { gridValidate, validateMsg } from "components/grid/validate";
 import ValidateAlert from "components/alert/gridValidate/validateAlert";
+import FdrAlert from "components/alert/fdrAlert";
 
 export function Line(props) {
   const { backDrop, snackBar } = useContext(LayoutContext);
@@ -109,24 +110,31 @@ export function Line(props) {
   };
 
   const [isValidate, setIsValidate] = useState({ open: false, validateErrorInfo: [] });
-  const onModify = () => {
+  const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
+  const onSave = () => {
     const validateError = gridValidate(refGrid);
 
     if (validateError?.length > 0) {
       setIsValidate({ ...isValidate, open: true, validateErrorInfo: validateError });
     } else {
-      gridModify({
-        backDrop: backDrop,
-        snackBar: snackBar,
-        ref: refGrid,
-        URI: { POST: URI_MDM.LINE.POST.LINE, PUT: URI_MDM.LINE.PUT.LINE, DELETE: URI_MDM.LINE.DELETE.LINE },
-        SCM: { POST: SCM_MDM.LINE.POST, PUT: SCM_MDM.LINE.PUT, DELETE: SCM_MDM.LINE.DELETE },
-        onSearch: onSearch,
-      });
+      const deleteState = gridDeleteCheck({ ref: refGrid });
+      if (deleteState) {
+        setIsDeleteAlertOpen(deleteState);
+      } else {
+        onModify();
+      }
     }
   };
-  const onCreate = () => {
-    gridCreate(backDrop, snackBar, refGrid, SCM_MDM.LINE.POST, URI_MDM.LINE.POST.LINE, setIsEditable);
+
+  const onModify = () => {
+    gridModify({
+      backDrop: backDrop,
+      snackBar: snackBar,
+      onSearch: onSearch,
+      ref: refGrid,
+      URI: { POST: URI_MDM.LINE.POST.LINE, PUT: URI_MDM.LINE.PUT.LINE, DELETE: URI_MDM.LINE.DELETE.LINE },
+      SCM: { POST: SCM_MDM.LINE.POST, PUT: SCM_MDM.LINE.PUT, DELETE: SCM_MDM.LINE.DELETE },
+    });
   };
 
   const onDblClick = (e) => {
@@ -198,14 +206,7 @@ export function Line(props) {
           onClick={onClick}
           title={"투입물품"}
         >
-          <FdrButtonGroup
-            isEditable={isEditable}
-            setIsEditable={setIsEditable}
-            ref={refGrid}
-            onCreate={onCreate}
-            onModify={onModify}
-            onSearch={onSearch}
-          />
+          <FdrButtonGroup isEditable={isEditable} setIsEditable={setIsEditable} ref={refGrid} onSave={onSave} />
         </FdrGrid>
       </S.Main>
       {isModalOpen && (
@@ -225,6 +226,7 @@ export function Line(props) {
         </FdrModal>
       )}
       {isValidate.open && <ValidateAlert setIsOpen={setIsValidate} validateErrorInfo={isValidate.validateErrorInfo} />}
+      {isDeleteAlertOpen && <FdrAlert setIsOpen={setIsDeleteAlertOpen} alertType="delete" onRightButton={onModify} />}
     </Contents>
   );
 }

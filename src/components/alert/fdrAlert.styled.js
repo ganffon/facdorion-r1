@@ -52,39 +52,52 @@ export const Main = styled("div")`
   overflow: hidden auto;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   gap: 10px;
 `;
 
-export const ErrorCard = styled("div")`
-  width: 100%;
-  padding: 10px 20px;
-  border-radius: 10px;
-  box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.3);
-
-  display: flex;
-`;
-
-export const ErrorCardTitle = styled("div")`
-  height: 30px;
-  width: 25%;
-  color: ${palette.red[500]};
-`;
-
-export const ErrorCardInfo = styled("pre")`
-  margin: 0px;
-  white-space: pre-wrap;
+export const Message = styled("pre")`
   font-family: NotoSansKR;
-  font-style: normal;
-  height: calc(100% - 30px);
-  width: 75%;
-  display: flex;
+  white-space: pre-wrap;
+  font-size: 1.3rem;
+  margin: 0px;
+  text-align: center;
 `;
-
-export const Button = styled("div")`
+export const SubMessage = styled("pre")`
+  font-family: NotoSansKR;
+  white-space: pre-wrap;
+  font-size: 1rem;
+  color: ${palette.black[500]};
+  margin: 0px;
+  text-align: center;
+`;
+export const ButtonWrap = styled("div")`
   height: 50px;
   width: 100%;
-  background: ${palette.black[100]};
+  display: flex;
+`;
+
+export const OneButton = styled("div")`
+  height: 100%;
+  width: ${($props) => $props.$width};
+  background: ${palette.blue[500]};
   border-radius: 0px 0px 10px 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  color: ${palette.white};
+  &:hover {
+    background: ${palette.blue[700]};
+  }
+`;
+export const LeftButton = styled("div")`
+  height: 100%;
+  width: ${($props) => $props.$width};
+  background: ${palette.black[100]};
+  border-radius: 0px 0px 0px 10px;
   cursor: pointer;
   display: flex;
   justify-content: center;
@@ -93,5 +106,34 @@ export const Button = styled("div")`
   color: ${palette.black[700]};
   &:hover {
     background: ${palette.black[200]};
+  }
+`;
+export const CenterButton = styled("div")`
+  height: 100%;
+  width: ${($props) => $props.$width};
+  background: ${palette.blue[200]};
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  color: ${palette.black[700]};
+  &:hover {
+    background: ${palette.blue[300]};
+  }
+`;
+export const RightButton = styled("div")`
+  height: 100%;
+  width: ${($props) => $props.$width};
+  background: ${palette.blue[500]};
+  border-radius: 0px 0px 10px 0px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  color: ${palette.white};
+  &:hover {
+    background: ${palette.blue[700]};
   }
 `;

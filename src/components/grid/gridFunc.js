@@ -13,10 +13,16 @@ export class gridCheckBox {
 
       if (el.checked) {
         grid.setValue(rowKey, elName, true);
-        grid.setValue(rowKey, "rowState", "editF");
+        const rowState = grid.getValue(rowKey, "rowState");
+        if (rowState !== "addF" && rowState !== "addS") {
+          grid.setValue(rowKey, "rowState", "editF");
+        }
       } else {
         grid.setValue(rowKey, elName, false);
-        grid.setValue(rowKey, "rowState", "editF");
+        const rowState = grid.getValue(rowKey, "rowState");
+        if (rowState !== "addF" && rowState !== "addS") {
+          grid.setValue(rowKey, "rowState", "editF");
+        }
       }
     });
 
