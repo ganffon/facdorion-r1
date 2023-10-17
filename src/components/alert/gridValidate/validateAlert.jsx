@@ -7,7 +7,7 @@ function ValidateAlert({
   height = "500px",
   position = "center" || "top",
   setIsOpen = () => {},
-  modalTitle = "데이터 유효성 검사",
+  alertTitle = "데이터 유효성 검사",
 }) {
   const error = validateErrorInfo.map((data, index) => {
     const title = `${data.rowKey}행 [${CN[data.columnName]["ko"]}]`;
@@ -25,7 +25,7 @@ function ValidateAlert({
     <S.Overlay>
       <S.Inner $width={width} $height={height} $position={position}>
         <S.Header>
-          <S.Title>{modalTitle}</S.Title>
+          <S.Title>{alertTitle}</S.Title>
         </S.Header>
         <S.Main>{error}</S.Main>
         <S.Button

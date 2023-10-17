@@ -30,12 +30,12 @@ const FdrGrid = forwardRef((props, ref) => {
     gridTheme();
   }, []);
 
-  const handleFocus = () => {
+  const handleGridFocus = () => {
     if (!isReport) {
       if (ref) {
         const grid = ref?.current?.gridInst;
         const coords = grid?.getFocusedCell();
-        if (coords && coords.columnName !== 0) {
+        if (coords.columnName) {
           grid?.startEditing(coords.rowKey, coords.columnName);
         }
       }
@@ -43,7 +43,7 @@ const FdrGrid = forwardRef((props, ref) => {
   };
 
   const beforeSelectedRow = useRef("");
-  const selectedRow = (e) => {
+  const handleSelectedBackColor = (e) => {
     if (ref) {
       const grid = ref?.current?.gridInst;
       if (String(beforeSelectedRow.current)) {
@@ -56,7 +56,7 @@ const FdrGrid = forwardRef((props, ref) => {
     }
   };
 
-  const checkAll = (e) => {
+  const handleCheckAll = (e) => {
     const grid = ref?.current?.gridInst;
     if (e.columnName === "_checked" && e.rowKey === undefined) {
       const checked = grid.getCheckedRowKeys().length !== grid.getRowCount();
@@ -80,17 +80,16 @@ const FdrGrid = forwardRef((props, ref) => {
     }
   };
 
-  const onEditFlag = (e) => {
-    console.log("onEditFlag");
+  const handleGridState = () => {
     const afterChange = (e) => {
-      console.log("afterChange Start");
       const rowKey = e?.changes[0].rowKey;
       const grid = ref?.current?.gridInst;
-      if (grid.getValue(rowKey, "rowState") !== ("addF" || "addS")) {
-        console.log("afterChange");
+      const rowState = grid.getValue(rowKey, "rowState");
+      if (rowState !== "addF" && rowState !== "addS") {
         grid.setValue(rowKey, "rowState", "editF");
       }
     };
+
     const grid = ref?.current?.gridInst;
 
     if (grid) {
@@ -180,12 +179,12 @@ const FdrGrid = forwardRef((props, ref) => {
             data={data}
             header={header}
             draggable={draggable}
-            ref={ref || null}
+            ref={ref}
             onClick={(e) => {
               onClick(e);
-              handleFocus();
-              selectedRow(e);
-              checkAll(e);
+              handleGridFocus();
+              handleSelectedBackColor(e);
+              handleCheckAll(e);
             }}
             onDblclick={onDblClick}
             onEditingFinish={(e) => {
@@ -193,7 +192,7 @@ const FdrGrid = forwardRef((props, ref) => {
               onEditingFinish(e);
             }}
             onEditingStart={(e) => {
-              onEditFlag(e);
+              handleGridState(e);
             }}
           />
           {tooltip.open && (

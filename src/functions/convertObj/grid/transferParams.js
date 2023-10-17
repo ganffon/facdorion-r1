@@ -88,6 +88,23 @@ const gridDelete = (ref, params) => {
 
   return convertData;
 };
+export const gridDeleteCheck = ({ ref }) => {
+  const grid = ref?.current?.gridInst;
+  grid.finishEditing();
+  const deleteData = grid?.getCheckedRows();
+
+  const updatedData = grid?.getData().filter((data) => data.rowState === "addF" || data.rowState === "addS");
+  //신규 등록 데이터 중 삭제 체크된 데이터가 있다면 신규 등록을 우선 적용하기 위해 삭제 데이터에서 제거함
+  const filteredDeletedData = deleteData.filter(
+    (deleteItem) => !updatedData.some((updateItem) => updateItem.rowKey === deleteItem.rowKey)
+  );
+
+  if (filteredDeletedData.length > 0) {
+    return true;
+  } else {
+    return false;
+  }
+};
 
 const convertMsg = (messageCode) => {
   switch (messageCode) {
@@ -119,63 +136,66 @@ export const gridModify = async ({
     backDrop.set(true);
     // 수정 -> 신규 -> 삭제 순서로 진행 함
     let messageCode = [];
-
-    const updated = gridPut(ref, SCM_PUT);
-    if (updated.length > 0) {
-      const putResult = await rest.put(URI_PUT, updated);
-      if (putResult.flag) {
-        messageCode.push("PUT_S");
-        const grid = ref?.current?.gridInst;
-        const updatedData = grid?.getData().filter((data) => data.rowState === "editF");
-        updatedData.forEach((data) => {
-          const { rowState, ...rest } = data;
-          const updatedRowData = {
-            ...rest,
-            rowState: "editS",
-          };
-          grid?.setRow(data.rowKey, updatedRowData);
-        });
-      } else {
-        messageCode.push("PUT_F");
-        const msg = messageCode.map((code) => convertMsg(code)).join(", ");
-        snackBar.set({ ...snackBar, open: true, type: "error", message: msg });
-        return;
+    if (URI_PUT && SCM_PUT) {
+      const updated = gridPut(ref, SCM_PUT);
+      if (updated.length > 0) {
+        const putResult = await rest.put(URI_PUT, updated);
+        if (putResult.flag) {
+          messageCode.push("PUT_S");
+          const grid = ref?.current?.gridInst;
+          const updatedData = grid?.getData().filter((data) => data.rowState === "editF");
+          updatedData.forEach((data) => {
+            const { rowState, ...rest } = data;
+            const updatedRowData = {
+              ...rest,
+              rowState: "editS",
+            };
+            grid?.setRow(data.rowKey, updatedRowData);
+          });
+        } else {
+          messageCode.push("PUT_F");
+          const msg = messageCode.map((code) => convertMsg(code)).join(", ");
+          snackBar.set({ ...snackBar, open: true, type: "error", message: msg });
+          return;
+        }
       }
     }
-
-    const created = gridPost(ref, SCM_POST);
-    if (created.length > 0) {
-      const postResult = await rest.post(URI_POST, created);
-      if (postResult.flag) {
-        messageCode.push("POST_S");
-        const grid = ref?.current?.gridInst;
-        const updatedData = grid?.getData().filter((data) => data.rowState === "addF");
-        updatedData.forEach((data) => {
-          const { rowState, ...rest } = data;
-          const updatedRowData = {
-            ...rest,
-            rowState: "addS",
-          };
-          grid?.setRow(data.rowKey, updatedRowData);
-        });
-      } else {
-        messageCode.push("POST_F");
-        const msg = messageCode.map((code) => convertMsg(code)).join(", ");
-        snackBar.set({ ...snackBar, open: true, type: "error", message: msg });
-        return;
+    if (URI_POST && SCM_POST) {
+      const created = gridPost(ref, SCM_POST);
+      if (created.length > 0) {
+        const postResult = await rest.post(URI_POST, created);
+        if (postResult.flag) {
+          messageCode.push("POST_S");
+          const grid = ref?.current?.gridInst;
+          const updatedData = grid?.getData().filter((data) => data.rowState === "addF");
+          updatedData.forEach((data) => {
+            const { rowState, ...rest } = data;
+            const updatedRowData = {
+              ...rest,
+              rowState: "addS",
+            };
+            grid?.setRow(data.rowKey, updatedRowData);
+          });
+        } else {
+          messageCode.push("POST_F");
+          const msg = messageCode.map((code) => convertMsg(code)).join(", ");
+          snackBar.set({ ...snackBar, open: true, type: "error", message: msg });
+          return;
+        }
       }
     }
-
-    const deleted = gridDelete(ref, SCM_DELETE);
-    if (deleted?.length > 0) {
-      const deleteResult = await rest.delete(URI_DELETE, deleted);
-      if (deleteResult.flag) {
-        messageCode.push("DELETE_S");
-      } else {
-        messageCode.push("DELETE_F");
-        const msg = messageCode.map((code) => convertMsg(code)).join(", ");
-        snackBar.set({ ...snackBar, open: true, type: "error", message: msg });
-        return;
+    if (URI_DELETE && SCM_DELETE) {
+      const deleted = gridDelete(ref, SCM_DELETE);
+      if (deleted?.length > 0) {
+        const deleteResult = await rest.delete(URI_DELETE, deleted);
+        if (deleteResult.flag) {
+          messageCode.push("DELETE_S");
+        } else {
+          messageCode.push("DELETE_F");
+          const msg = messageCode.map((code) => convertMsg(code)).join(", ");
+          snackBar.set({ ...snackBar, open: true, type: "error", message: msg });
+          return;
+        }
       }
     }
 
