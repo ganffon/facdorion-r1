@@ -150,7 +150,7 @@ export const col = (props) => {
       return column;
     case "check":
       column = {
-        className: isEditable ? "tui-grid-cell-editable" : "",
+        className: isEditable ? "tui-grid-cell-editable" : "base",
         name: id,
         header: name,
         minWidth: width,

@@ -27,7 +27,7 @@ export const validateMsg = (errorCode, value) => {
   }
 };
 
-export const gridValidate = (ref) => {
+export const gridValidateError = (ref) => {
   const grid = ref?.current?.gridInst;
   grid.finishEditing();
   const result = grid.validate();

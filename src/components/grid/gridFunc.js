@@ -348,7 +348,7 @@ export const copyRow = (refGrid, setGridData, columns, copyColumnNames, btnRowKe
     setGridData(copiedData);
   }
 };
-export const cancelRow = (ref, setGridData, btnRowKey = null) => {
+export const copyCancelRow = (ref, setGridData, btnRowKey = null) => {
   if (ref) {
     let rowKey = null;
     if (!btnRowKey) {
@@ -409,6 +409,15 @@ export const removeRow = (ref) => {
       const selectedRowData = ref.current.gridInst.getRow(coords.rowKey);
       if (selectedRowData.rowState === "addF") {
         grid?.removeRow(coords.rowKey);
+      } else {
+        const rowCount = grid?.getData()?.length;
+        if (rowCount > 0) {
+          const lastRowData = ref.current.gridInst.getRowAt(rowCount - 1);
+          const lastRowKey = lastRowData.rowKey;
+          if (lastRowData.rowState === "addF") {
+            grid?.removeRow(lastRowKey);
+          }
+        }
       }
     } else {
       const rowCount = grid?.getData()?.length;
@@ -453,13 +462,6 @@ export class SVGFlagRenderer {
     }
   }
 }
-/**
- * 컬럼명 중 필수값 컬럼명 앞에 * 표시를 하기 위함
- */
-export const req = (columnName) => {
-  const requireName = "*" + columnName;
-  return requireName;
-};
 
 // export class CheckboxRenderer {
 //   constructor(props) {

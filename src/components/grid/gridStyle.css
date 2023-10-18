@@ -9,14 +9,15 @@
 .gridSelect {
   background: #eaf4ea !important;
 }
-.gridFlag {
-  background: #e5e5e5 !important;
+.gridSelectedBackColor {
+  background: #eafaff !important;
 }
-
+.gridFontRed {
+  color: red;
+}
 .tui-grid-cell-required:not(.tui-grid-cell-editable):not(.tui-grid-cell-invalid) {
-  background: #ffff !important;
+  background: #ffff;
 }
-
 .tui-grid-cell-required.tui-grid-cell-editable.tui-grid-cell-invalid {
   background: #faeaea !important;
 }

@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import * as S from "../fdrComponents.styled";
+import React, { useState } from "react";
+import * as S from "./fdrButton.styled";
 import { palette } from "constant/color/color";
 import { ReactComponent as SearchIcon } from "img/button/search.svg";
 import { ReactComponent as AddRowIcon } from "img/button/addRow.svg";

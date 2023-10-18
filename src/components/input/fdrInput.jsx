@@ -1,5 +1,4 @@
-import React from "react";
-import * as S from "../fdrComponents.styled";
+import * as S from "./fdrInput.styled";
 
 function FdrInput(props) {
   const {

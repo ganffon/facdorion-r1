@@ -88,7 +88,7 @@ const gridDelete = (ref, params) => {
 
   return convertData;
 };
-export const gridDeleteCheck = ({ ref }) => {
+export const gridDeleteCheck = (ref) => {
   const grid = ref?.current?.gridInst;
   grid.finishEditing();
   const deleteData = grid?.getCheckedRows();
