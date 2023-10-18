@@ -1,23 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
-import * as S from "../fdrComponents.styled";
-import { TextField } from "@mui/material";
+import React, { useEffect } from "react";
+import * as S from "./fdrRadio.styled";
 
 function FdrRadio(props) {
   const {
-    height = "40px",
-    width = "160px",
-    fontSize = "16px",
-    labelFontSize = "",
     id,
     label = "",
-    list = [],
     dispatch = () => {},
     dispatchType = "update",
     disabled = false,
     defaultCheckedIndex = 0,
     value = {},
     onSearch = () => {},
-    className = "",
   } = props;
 
   const onKeyDown = (e) => {
@@ -37,7 +30,7 @@ function FdrRadio(props) {
       <S.RadioLabel>{label}</S.RadioLabel>
       {valueKeys.map((value, index) => {
         return (
-          <S.RadioWrap key={`${id}${index}`}>
+          <S.RadioWrap key={`${id}${index}`} onKeyDown={onKeyDown}>
             <S.Radio
               type={"radio"}
               id={`${id}${index}`}

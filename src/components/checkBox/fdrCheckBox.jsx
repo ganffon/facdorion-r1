@@ -1,22 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
-import * as S from "../fdrComponents.styled";
+import React, { useEffect, useState } from "react";
+import * as S from "./fdrCheckBox.styled";
 
 function FdrCheckBox(props) {
   const {
-    height = "40px",
-    width = "160px",
-    fontSize = "16px",
-    labelFontSize = "",
     id,
     label = "",
-    list = [],
     dispatch = () => {},
     dispatchType = "update",
     disabled = false,
     defaultCheckedIndex = [],
     value = {},
     onSearch = () => {},
-    className = "",
   } = props;
 
   const onKeyDown = (e) => {
@@ -24,6 +18,7 @@ function FdrCheckBox(props) {
       onSearch();
     }
   };
+
   const valueKeys = Object.keys(value);
   const valueValues = Object.values(value);
 
@@ -57,6 +52,7 @@ function FdrCheckBox(props) {
               defaultChecked={defaultCheckedIndex.includes(index)} // 초기 선택 값
               disabled={disabled}
               onChange={handleCheckboxChange}
+              onKeyDown={onKeyDown}
             />
             <S.CheckBoxText htmlFor={`${id}${index}`}>{valueValues[index]}</S.CheckBoxText>
           </S.CheckBoxWrap>

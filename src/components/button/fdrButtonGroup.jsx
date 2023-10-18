@@ -1,14 +1,14 @@
-import React, { forwardRef, useEffect } from "react";
+import React, { forwardRef } from "react";
 import FdrButton from "./fdrButton";
 import { addRow, oneAddRow, removeRow } from "components/grid/gridFunc";
-import * as S from "../fdrComponents.styled";
+import * as S from "./fdrButtonGroup.styled";
 
 const FdrButtonGroup = forwardRef((props, ref) => {
-  const { addRowType = "", isEditable, setIsEditable, onCreate = () => {}, onSave = () => {} } = props;
+  const { addRowType = "", onSave = () => {} } = props;
   const onAddRow = () => {
     if (addRowType === "") {
       addRow(ref);
-    } else if (addRowType === "one") {
+    } else if (addRowType === "onlyOne") {
       oneAddRow(ref);
     }
   };

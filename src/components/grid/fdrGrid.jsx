@@ -1,11 +1,11 @@
-import React, { forwardRef, useContext, useEffect, useMemo, useRef, useState } from "react";
-import * as S from "../fdrComponents.styled";
+import React, { forwardRef, useContext, useEffect, useMemo, useState } from "react";
+import * as S from "./fdrGrid.styled";
 import Grid from "@toast-ui/react-grid";
 import gridTheme from "./gridTheme.js";
 import "tui-grid/dist/tui-grid.css";
 import { LayoutContext } from "components/layout/layout";
 import "tui-date-picker/dist/tui-date-picker.css";
-import { onlyNum, onlyTime } from "functions/regularExpression/regularExpression";
+import { onlyTime } from "functions/regularExpression/regularExpression";
 import { tooltipStore } from "components/tooltip/Tooltip";
 
 const FdrGrid = forwardRef((props, ref) => {
@@ -22,7 +22,7 @@ const FdrGrid = forwardRef((props, ref) => {
     onClick = () => {},
     onDblClick = () => {},
     onEditingFinish = () => {},
-    isReport = {},
+    isReport = true,
     title = "",
   } = props;
 
@@ -30,9 +30,9 @@ const FdrGrid = forwardRef((props, ref) => {
     gridTheme();
   }, []);
 
-  const handleGridFocus = () => {
+  const handleGridFocus = (e) => {
     if (!isReport) {
-      if (ref) {
+      if (ref && e?.targetType === "cell") {
         const grid = ref?.current?.gridInst;
         const coords = grid?.getFocusedCell();
         if (coords.columnName) {
@@ -42,19 +42,25 @@ const FdrGrid = forwardRef((props, ref) => {
     }
   };
 
-  const beforeSelectedRow = useRef("");
-  const handleSelectedBackColor = (e) => {
-    if (ref) {
-      const grid = ref?.current?.gridInst;
-      if (String(beforeSelectedRow.current)) {
-        grid?.getColumns().map((col) => grid?.removeCellClassName(beforeSelectedRow.current, col.name, "selectedBack"));
-      }
-      if (isReport) {
-        grid?.getColumns().map((col) => grid?.addCellClassName(e?.rowKey, col.name, "selectedBack"));
-        beforeSelectedRow.current = e?.rowKey;
-      }
-    }
-  };
+  /**
+   * 그리드 2개 이상 있는 경우 className 동작이 불안정하여 기능 일단 제거함.
+   */
+  // const beforeSelectedRow = useRef("");
+  // const handleSelectedBackColor = (e) => {
+  //   if (ref && e?.targetType === "cell") {
+  //     const grid = ref?.current?.gridInst;
+  //     if (String(beforeSelectedRow.current)) {
+  //       grid
+  //         ?.getColumns()
+  //         .map((col) => grid?.removeCellClassName(beforeSelectedRow.current, col.name, "gridSelectedBackColor"));
+  //     }
+  //     if (isReport) {
+  //       console.log(isReport);
+  //       grid?.getColumns().map((col) => grid?.addCellClassName(e?.rowKey, col.name, "gridSelectedBackColor"));
+  //       beforeSelectedRow.current = e?.rowKey;
+  //     }
+  //   }
+  // };
 
   const handleCheckAll = (e) => {
     const grid = ref?.current?.gridInst;
@@ -182,8 +188,8 @@ const FdrGrid = forwardRef((props, ref) => {
             ref={ref}
             onClick={(e) => {
               onClick(e);
-              handleGridFocus();
-              handleSelectedBackColor(e);
+              handleGridFocus(e);
+              // handleSelectedBackColor(e);
               handleCheckAll(e);
             }}
             onDblclick={onDblClick}

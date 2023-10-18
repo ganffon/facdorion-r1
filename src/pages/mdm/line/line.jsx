@@ -15,25 +15,28 @@ import LineSet from "./line.set";
 import FdrRadio from "components/radio/fdrRadio";
 import FdrCheckBox from "components/checkBox/fdrCheckBox";
 import { SCM_MDM, URI_MDM } from "api/uri";
-import { gridCreate, gridDeleteCheck, gridModify } from "functions/convertObj/grid/transferParams";
+import { gridDeleteCheck, gridModify } from "functions/convertObj/grid/transferParams";
 import FdrButtonGroup from "components/button/fdrButtonGroup";
 import condition from "functions/gridColumnCondition/condition";
 import FdrModal from "components/modal/fdrModal";
-import { gridValidate, validateMsg } from "components/grid/validate";
-import ValidateAlert from "components/alert/gridValidate/validateAlert";
+import { gridValidateError } from "components/grid/validate";
 import FdrAlert from "components/alert/fdrAlert";
 
 export function Line(props) {
-  const { backDrop, snackBar } = useContext(LayoutContext);
+  const { backDrop, snackBar, gridValidation } = useContext(LayoutContext);
+
   const [gridData, setGridData] = useState(null);
+  const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
+  const [isEditable, setIsEditable] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const refGrid = useRef(null);
   const refGridModal = useRef(null);
+
   const [lineList] = useLine();
   const [processList] = useProcess();
-  const [isEditable, setIsEditable] = useState(false);
-  const { header, columnsModify, columnsPost, columnOptions } = LineSet(isEditable, refGrid, processList);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { header, columnsModify, columnsPost, columnOptions } = LineSet(isEditable, refGrid, processList);
 
   const filterReducer = (filter, action) => {
     switch (action.type) {
@@ -90,8 +93,8 @@ export function Line(props) {
     // }, 8000);
 
     const params = {
-      line_nm: filter.aInput,
-      prod_nm: filter.bInput,
+      line_nm: filter.lineNm,
+      line_cd: filter.lineCd,
       model_nm: filter.aCombo?.value,
       subtotal: filter.radioTest,
       check: filter.checkTest,
@@ -109,15 +112,12 @@ export function Line(props) {
     }
   };
 
-  const [isValidate, setIsValidate] = useState({ open: false, validateErrorInfo: [] });
-  const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false);
   const onSave = () => {
-    const validateError = gridValidate(refGrid);
-
+    const validateError = gridValidateError(refGrid);
     if (validateError?.length > 0) {
-      setIsValidate({ ...isValidate, open: true, validateErrorInfo: validateError });
+      gridValidation.set({ ...gridValidation.state, open: true, validateError: validateError });
     } else {
-      const deleteState = gridDeleteCheck({ ref: refGrid });
+      const deleteState = gridDeleteCheck(refGrid);
       if (deleteState) {
         setIsDeleteAlertOpen(deleteState);
       } else {
@@ -150,23 +150,44 @@ export function Line(props) {
   return (
     <Contents>
       <S.Header>
-        <FdrDate id={"startDate"} label={"조회기간"} value={filter.startDate} dispatch={filterDispatch} />
-        <FdrDate id={"endDate"} limit={"after"} value={filter.endDate} dispatch={filterDispatch} />
-        <FdrInput id={"aInput"} label={"A Input"} value={filter.aInput} dispatch={filterDispatch} />
-        <FdrInput id={"bInput"} label={"B Input"} value={filter.bInput} dispatch={filterDispatch} />
-        <FdrCombo id={"aCombo"} label={"test"} list={lineList} value={filter.aCombo} dispatch={filterDispatch} />
+        <FdrDate
+          id={"startDate"}
+          label={"조회기간"}
+          value={filter.startDate}
+          dispatch={filterDispatch}
+          onSearch={onSearch}
+        />
+        <FdrDate id={"endDate"} limit={"after"} value={filter.endDate} dispatch={filterDispatch} onSearch={onSearch} />
+        <FdrInput
+          id={"lineCd"}
+          label={"라인코드"}
+          value={filter.lineCd}
+          dispatch={filterDispatch}
+          onSearch={onSearch}
+        />
+        <FdrInput id={"lineNm"} label={"라인명"} value={filter.lineNm} dispatch={filterDispatch} onSearch={onSearch} />
+        <FdrCombo
+          id={"aCombo"}
+          label={"test"}
+          list={lineList}
+          value={filter.aCombo}
+          dispatch={filterDispatch}
+          onSearch={onSearch}
+        />
         <FdrRadio
           id={"radioTest"}
           label={"소계"}
           value={{ prod: "품목", model: "제품군" }}
           dispatch={filterDispatch}
           defaultCheckedIndex={1}
+          onSearch={onSearch}
         />
         <FdrCheckBox
           id={"checkTest"}
           label={"소계"}
           value={{ 품목: "품목", 제품군: "제품군" }}
           dispatch={filterDispatch}
+          onSearch={onSearch}
         />
         <FdrButton id={"search"} onClick={onSearch} fill={true} />
         {/* <FdrButton id={"addRow"} /> */}
@@ -225,7 +246,6 @@ export function Line(props) {
           />
         </FdrModal>
       )}
-      {isValidate.open && <ValidateAlert setIsOpen={setIsValidate} validateErrorInfo={isValidate.validateErrorInfo} />}
       {isDeleteAlertOpen && <FdrAlert setIsOpen={setIsDeleteAlertOpen} alertType="delete" onRightButton={onModify} />}
     </Contents>
   );

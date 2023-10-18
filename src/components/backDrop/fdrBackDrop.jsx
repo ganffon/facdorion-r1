@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import * as S from "../fdrComponents.styled";
+import React, { useEffect, useState } from "react";
+import * as S from "./fdrBackDrop.styled";
 import dot from "img/backDrop/dot.svg";
 import backDrop from "img/backDrop/backDrop.svg";
 import working from "img/backDrop/working.svg";

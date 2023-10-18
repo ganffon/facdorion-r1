@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import * as S from "../fdrComponents.styled";
+import * as S from "./fdrSnackBar.styled";
 import { LayoutContext } from "components/layout/layout";
 import success from "img/snackBar/success.svg";
 import warning from "img/snackBar/warning.svg";

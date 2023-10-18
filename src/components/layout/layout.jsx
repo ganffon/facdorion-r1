@@ -4,6 +4,7 @@ import * as S from "./layout.styled";
 import Menu from "./nav/menu";
 import FdrBackDrop from "components/backDrop/fdrBackDrop";
 import FdrSnackBar from "components/snackBar/fdrSnackBar";
+import ValidateAlert from "components/alert/gridValidate/validateAlert";
 
 export const LayoutContext = createContext();
 
@@ -19,6 +20,7 @@ const Layout = ({ children }) => {
   const [isSnackOpen, setIsSnackOpen] = useState({
     open: false,
   });
+  const [isValidate, setIsValidate] = useState({ open: false, validateError: [] });
 
   const menuSlide = {
     state: isMenuSlide,
@@ -32,6 +34,10 @@ const Layout = ({ children }) => {
     state: isSnackBar,
     set: setIsSnackBar,
   };
+  const gridValidation = {
+    state: isValidate,
+    set: setIsValidate,
+  };
 
   return (
     <LayoutContext.Provider
@@ -39,6 +45,7 @@ const Layout = ({ children }) => {
         menuSlide,
         backDrop,
         snackBar,
+        gridValidation,
       }}
     >
       <S.LayoutBox>
@@ -52,6 +59,7 @@ const Layout = ({ children }) => {
         </S.Main>
       </S.LayoutBox>
       {isSnackBar.open && <FdrSnackBar />}
+      {isValidate.open && <ValidateAlert />}
       {isBackDrop && <FdrBackDrop />}
     </LayoutContext.Provider>
   );

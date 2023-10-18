@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import * as S from "../fdrComponents.styled";
+import * as S from "./fdrDate.styled";
 
 function FdrDate(props) {
   const {
